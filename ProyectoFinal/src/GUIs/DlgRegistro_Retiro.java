@@ -64,9 +64,9 @@ public class DlgRegistro_Retiro extends JDialog {
 		txtResultado.add(lblMantenimienoRetiro);
 		
 		JButton btnConsultar = new JButton("CONSULTAR");
-		btnConsultar.setPressedIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnConsultar.setRolloverIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnConsultar.setIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_1.png"));
+		btnConsultar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnConsultar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnConsultar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
 		btnConsultar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnConsultar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnConsultar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -81,9 +81,9 @@ public class DlgRegistro_Retiro extends JDialog {
 		txtResultado.add(btnConsultar);
 		
 		JButton btnAdicionar = new JButton("ADICIONAR");
-		btnAdicionar.setPressedIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnAdicionar.setRolloverIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnAdicionar.setIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_1.png"));
+		btnAdicionar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnAdicionar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnAdicionar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
 		btnAdicionar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnAdicionar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnAdicionar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -98,9 +98,9 @@ public class DlgRegistro_Retiro extends JDialog {
 		txtResultado.add(btnAdicionar);
 		
 		JButton btnModificar = new JButton("MODIFICAR");
-		btnModificar.setPressedIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnModificar.setRolloverIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnModificar.setIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_1.png"));
+		btnModificar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnModificar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnModificar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
 		btnModificar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnModificar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnModificar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -115,9 +115,9 @@ public class DlgRegistro_Retiro extends JDialog {
 		txtResultado.add(btnModificar);
 		
 		JButton btnEliminar = new JButton("ELIMINAR");
-		btnEliminar.setPressedIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnEliminar.setRolloverIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnEliminar.setIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_1.png"));
+		btnEliminar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnEliminar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnEliminar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
 		btnEliminar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnEliminar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnEliminar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -182,9 +182,9 @@ public class DlgRegistro_Retiro extends JDialog {
 		txtResultado.add(textField_4);
 		
 		JButton btnBuscar = new JButton("BUSCAR");
-		btnBuscar.setPressedIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_1.png"));
-		btnBuscar.setRolloverIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnBuscar.setIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_1.png"));
+		btnBuscar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
+		btnBuscar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnBuscar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
 		btnBuscar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnBuscar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnBuscar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -216,9 +216,9 @@ public class DlgRegistro_Retiro extends JDialog {
 		txtResultado.add(table);
 		
 		JButton btnAceptar = new JButton("ACEPTAR");
-		btnAceptar.setPressedIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar1.png"));
-		btnAceptar.setRolloverIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar2.png"));
-		btnAceptar.setIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar1.png"));
+		btnAceptar.setPressedIcon(new ImageIcon("imagenes\\BotonAceptar1.png"));
+		btnAceptar.setRolloverIcon(new ImageIcon("imagenes\\BotonAceptar2.png"));
+		btnAceptar.setIcon(new ImageIcon("imagenes\\BotonAceptar1.png"));
 		btnAceptar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnAceptar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnAceptar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -234,9 +234,9 @@ public class DlgRegistro_Retiro extends JDialog {
 		txtResultado.add(btnAceptar);
 		
 		JButton btnCerrar = new JButton("");
-		btnCerrar.setPressedIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_CERRAR_1.png"));
-		btnCerrar.setRolloverIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_CERRAR_2.png"));
-		btnCerrar.setIcon(new ImageIcon("C:\\Users\\PCRUIZ\\Desktop\\FinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_CERRAR_1.png"));
+		btnCerrar.setPressedIcon(new ImageIcon("imagenes\\BOTON_CERRAR_1.png"));
+		btnCerrar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_CERRAR_2.png"));
+		btnCerrar.setIcon(new ImageIcon("imagenes\\BOTON_CERRAR_1.png"));
 		btnCerrar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnCerrar.setContentAreaFilled(false);
 		btnCerrar.setBorderPainted(false);
