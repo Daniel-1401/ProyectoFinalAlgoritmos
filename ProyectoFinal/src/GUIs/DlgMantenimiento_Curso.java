@@ -1,9 +1,10 @@
 package GUIs;
 
-import Clases.Alumno;
 import Clases.Curso;
+import Clases.Matricula;
 import Libreria.Lib;
 import Arreglos.ArregloCurso;
+import Arreglos.ArregloMatricula;
 import FuncionGenerales.FuncionesGenerales;
 
 
@@ -378,7 +379,6 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	protected void ADICIONAR(ActionEvent arg0) {
 		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
 		btnAdicionar.setEnabled(false);
-//		btnAceptar.setEnabled(false);
 		btnBuscar.setEnabled(false);
 		txtCodigo.setEditable(true);
 		limpieza();
@@ -482,14 +482,39 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 				btnEliminar.setEnabled(true);
 			}
 			else {
-				FuncionesGenerales.error("No se puede eliminar el curso " + C.getAsignatura());
+				FuncionesGenerales.error("No se puede eliminar el curso " + C.getAsignatura() + "\nPorque hay alumnos registrados");
 			}
+			btnEliminar.setEnabled(true);
 		}
 	}
 	
-	private boolean ExistenAlumno(int codigo){
+	
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	
+	ArregloMatricula arregloMatricula = new ArregloMatricula();
+	private boolean ExistenAlumno(int codCurso){
+		for (int i = 0; i < arregloMatricula.tamaño(); i++) {
+			Matricula m = arregloMatricula.obtener(i);
+			if (codCurso == m.getcodCurso()) {
+				return false;
+			}
+		}
 		return true;
 	}
+	
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
+	//FALTA LLENAR
 	
 	private void Listar() {
 		int posFila = 0;

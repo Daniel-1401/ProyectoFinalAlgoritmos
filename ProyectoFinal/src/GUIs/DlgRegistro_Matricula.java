@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
@@ -29,14 +30,19 @@ import Clases.Curso;
 import Clases.Matricula;
 import FuncionGenerales.FuncionesGenerales;
 import Libreria.Fecha;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 
-public class DlgRegistro_Matricula extends JDialog implements ActionListener {
+public class DlgRegistro_Matricula extends JDialog implements ActionListener, KeyListener, MouseListener {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable tblMatricula;
 	private DefaultTableModel modelo;
 	private JTextField txtNumMatricula;
 	private JTextField txtCodigoCurso;
+	private JTextField txtCodigoAlumno;
 	private JButton btnAceptar;
 	private JButton btnAdicionar;
 	private JButton btnEliminar;
@@ -181,7 +187,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener {
 		btnAceptar.setBorderPainted(false);
 		btnAceptar.setBorder(null);
 		btnAceptar.setBackground(Color.LIGHT_GRAY);
-		btnAceptar.setBounds(196, 108, 110, 110);
+		btnAceptar.setBounds(210, 108, 110, 110);
 		contentPanel.add(btnAceptar);
 		
 		btnCerrar = new JButton("");
@@ -227,16 +233,18 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener {
 		txtNumMatricula.setColumns(10);
 		
 		cboCodAlumno = new JComboBox <String>();
+		cboCodAlumno.addMouseListener(this);
+		cboCodAlumno.addActionListener(this);
 		cboCodAlumno.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cboCodAlumno.setEditable(false);
-		cboCodAlumno.setBounds(51, 109, 102, 20);
+		cboCodAlumno.setBounds(98, 105, 102, 20);
 		contentPanel.add(cboCodAlumno);
 		obtenerAlumnos();
 		
 		cboCodCurso = new JComboBox <String>();
 		cboCodCurso.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		cboCodCurso.setEditable(false);
-		cboCodCurso.setBounds(51, 200, 102, 20);
+		cboCodCurso.setBounds(98, 193, 102, 20);
 		contentPanel.add(cboCodCurso);
 		obtenerCursos();
 		
@@ -246,6 +254,8 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener {
 		JTextArea txtResultado = new JTextArea();
 		
 		tblMatricula = new JTable();
+		tblMatricula.addMouseListener(this);
+		tblMatricula.addKeyListener(this);
 		scrollPane.setViewportView(tblMatricula);
 		tblMatricula.setFillsViewportHeight(true);
 		
@@ -259,8 +269,24 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener {
 		txtNumMatricula.setEditable(false);
 		cboCodAlumno.setEnabled(false);
 		cboCodCurso.setEnabled(false);
+		
+		txtCodigoAlumno = new JTextField();
+		txtCodigoAlumno.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtCodigoAlumno.setEditable(false);
+		txtCodigoAlumno.setColumns(10);
+		txtCodigoAlumno.setBounds(10, 130, 102, 20);
+		contentPanel.add(txtCodigoAlumno);
+		
+		txtCodigoCurso = new JTextField();
+		txtCodigoCurso.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtCodigoCurso.setEditable(false);
+		txtCodigoCurso.setColumns(10);
+		txtCodigoCurso.setBounds(10, 219, 102, 20);
+		contentPanel.add(txtCodigoCurso);
 		listar();
 		editarFila();
+		txtCodigoAlumno.setEnabled(false);
+		txtCodigoCurso.setEnabled(false);
 	}
 	
 	void obtenerAlumnos() {
@@ -286,6 +312,9 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener {
 	ArregloMatricula arregloMatricula = new ArregloMatricula();
 	
 	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == cboCodAlumno) {
+			actionPerformedCboCodAlumno(arg0);
+		}
 		if (arg0.getSource() == btnAceptar) {
 			ACEPTAR(arg0);
 		}
@@ -317,6 +346,20 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener {
 
 	}
 	protected void MODIFICAR(ActionEvent arg0) {
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnConsultar, btnEliminar, btnModificar, btnAdicionar, btnAceptar);
+		btnModificar.setEnabled(false);
+		cboCodCurso.setEnabled(true);
+		if (arregloMatricula.tamaño() == 0) {
+			btnAceptar.setEnabled(false);
+			habilitarEntradas(false);
+			FuncionesGenerales.error("No existen matriculas");
+			btnModificar.setEnabled(true);
+		}
+		else {
+			editarFila();
+			cboCodCurso.setEnabled(true);
+			
+		}
 	}
 	protected void ELIMINAR(ActionEvent arg0) {
 	}
@@ -340,6 +383,8 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener {
 			arregloMatricula.actualizarArchivo();
 			btnModificar.setEnabled(true);
 		}
+		listar();
+		habilitarEntradas(false);
 	}
 	
 	private void listar() {
@@ -385,6 +430,41 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener {
 	void habilitarEntradas(boolean X) {
 		cboCodAlumno.setEnabled(X);
 		cboCodCurso.setEnabled(X);
+	}
+	public void keyPressed(KeyEvent e) {
+		if (e.getSource() == tblMatricula) {
+			keyPressedTblMatricula(e);
+		}
+	}
+	public void keyReleased(KeyEvent e) {
+	}
+	public void keyTyped(KeyEvent e) {
+	}
+	protected void keyPressedTblMatricula(KeyEvent e) {
+	}
+	public void mouseClicked(MouseEvent e) {
+		if (e.getSource() == cboCodAlumno) {
+			mouseClickedCboCodAlumno(e);
+		}
+		if (e.getSource() == tblMatricula) {
+			mouseClickedTblMatricula(e);
+		}
+	}
+	public void mouseEntered(MouseEvent e) {
+	}
+	public void mouseExited(MouseEvent e) {
+	}
+	public void mousePressed(MouseEvent e) {
+	}
+	public void mouseReleased(MouseEvent e) {
+	}
+	protected void mouseClickedTblMatricula(MouseEvent e) {
+	}
+	protected void actionPerformedCboCodAlumno(ActionEvent arg0) {
+		txtCodigoAlumno.setText("" + cboCodAlumno.getSelectedItem());
+	}
+	protected void mouseClickedCboCodAlumno(MouseEvent e) {
+		cboCodAlumno.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
 }
 

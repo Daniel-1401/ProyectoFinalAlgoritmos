@@ -211,9 +211,9 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		if (arg0.getSource() == RETIRO) {
 			JDialogRETIRO(arg0);
 		}
-		if (arg0.getSource() == MATRICULA) {
-			JDialogMATRICULA(arg0);
-		}
+//		if (arg0.getSource() == MATRICULA) {
+//			JDialogMATRICULA(arg0);
+//		}
 		if (arg0.getSource() == CURSO) {
 			JDialogCURSO(arg0);
 		}
@@ -237,12 +237,12 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		DMC.setLocationRelativeTo(null);
 		DMC.setVisible(true);
 	}
-	protected void JDialogMATRICULA(ActionEvent arg0) {
-		DlgRegistro_Matricula DRM = new DlgRegistro_Matricula();
-		DRM.setLocationRelativeTo(null);
-		DRM.setVisible(true);
-		
-	}
+//	protected void JDialogMATRICULA(ActionEvent arg0) {
+//		DlgRegistro_Matricula DRM = new DlgRegistro_Matricula();
+//		DRM.setLocationRelativeTo(null);
+//		DRM.setVisible(true);
+//		
+//	}
 	protected void JDialogRETIRO(ActionEvent arg0) {
 		DlgRegistro_Retiro DRR = new DlgRegistro_Retiro();
 		DRR.setLocationRelativeTo(null);

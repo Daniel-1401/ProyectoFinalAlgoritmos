@@ -529,6 +529,7 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 			HabilitarEntrada(true);
 			txtDniAlumno.setEditable(false);
 			txtNombresAlumno.requestFocus();
+			cboEstadoAlumno.setEnabled(false);
 		}
 	}
 	protected void ELIMINAR(ActionEvent e) {
