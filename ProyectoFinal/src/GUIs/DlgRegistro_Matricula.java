@@ -160,7 +160,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		btnEliminar.setBounds(575, 203, 110, 40);
 		contentPanel.add(btnEliminar);
 		
-		lblNewLabel = new JLabel("MANTENIMIENO | ALUMNO");
+		lblNewLabel = new JLabel("REGISTRO | MATRICULA");
 		lblNewLabel.setForeground(Color.DARK_GRAY);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblNewLabel.setBounds(10, 10, 220, 20);
