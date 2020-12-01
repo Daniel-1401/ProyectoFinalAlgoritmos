@@ -98,13 +98,14 @@ public class ArregloMatricula {
 		}
 	}
 	
-//	public boolean ApareceAlumno(int codAlumno) {
-//		for (int i = 0; i < tamaño(); i++) {
-//			if (obtener(i).getcodAlumno() == codAlumno && obtener(i).get) {
-//				
-//			}
-//		}
-//	}
+	public boolean ProcedeAlumno(int codAlumno) {
+		for (int i = 0; i < tamaño(); i++) {
+			if (obtener(i).getcodAlumno() == codAlumno) {
+				return false;
+			}
+		}
+		return false;
+	}
 }
 
 

@@ -34,4 +34,7 @@ public class FuncionesGenerales {
 		E.setEnabled(X);
 		F.setEnabled(X);
 	}
+	public static void MostrarDatos(String Mnsj) {
+		int input = JOptionPane.showConfirmDialog(null,Mnsj, "DATOS:", JOptionPane.DEFAULT_OPTION);
+	}
 }

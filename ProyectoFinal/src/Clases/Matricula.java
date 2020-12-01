@@ -26,7 +26,7 @@ public class Matricula {
 	public int getcodCurso() {
 		return codCurso;
 	}
-	public void setcodCurdo(int codCurso) {
+	public void setcodCurso(int codCurso) {
 		this.codCurso = codCurso;
 	}
 	public String getFecha() {
