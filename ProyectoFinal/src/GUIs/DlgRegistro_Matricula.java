@@ -400,7 +400,6 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 						Alumno a = aa.buscar(codAlumno);
 						a.setEstado(1);
 						aa.actualizarArchivo();
-//						cboCodAlumno.removeItem(cboCodAlumno.getSelectedItem());
 						obtenerCodAlumno();
 						obtenerNumMatricula();
 					}
