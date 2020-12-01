@@ -1,37 +1,39 @@
 package GUIs;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
-
-
-//IMPORTES
-import Clases.*;
-import Libreria.Fecha;
-import Arreglos.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import Arreglos.ArregloAlumno;
+import Arreglos.ArregloCurso;
+import Arreglos.ArregloMatricula;
+import Arreglos.ArregloRetiro;
+//IMPORTES
+import Clases.Alumno;
+import Clases.Curso;
+import Clases.Matricula;
+import Clases.Retiro;
+import Libreria.Fecha;
 
 public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyListener, MouseListener {
 
@@ -65,12 +67,13 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		}
 	}
 	
-	//DECLARO LAS VARIABLES GLOBALES
+	// CREO E INICIALIZO LOS OBJETOS DE LAS CLASES ARREGLO
 	ArregloRetiro ar = new ArregloRetiro(); 
 	ArregloMatricula am = new ArregloMatricula();
 	ArregloAlumno aa = new ArregloAlumno();
 	ArregloCurso ac = new ArregloCurso();
 	private JLabel label;
+	private JButton btnCerrar;
 	
 	
 
@@ -262,7 +265,8 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		btnAceptar.setBounds(307, 131, 110, 110);
 		contentPanel.add(btnAceptar);
 		
-		JButton btnCerrar = new JButton("");
+		btnCerrar = new JButton("");
+		btnCerrar.addActionListener(this);
 		btnCerrar.setPressedIcon(new ImageIcon("imagenes\\BOTON_CERRAR_1.png"));
 		btnCerrar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_CERRAR_2.png"));
 		btnCerrar.setIcon(new ImageIcon("imagenes\\BOTON_CERRAR_1.png"));
@@ -292,8 +296,15 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		modelo.addColumn("Hora");
 		tblRetiro.setModel(modelo);
 		
+		habilitarEntradas(false);
+		listar();
+		editarFila();
+		
 	}
 	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnCerrar) {
+			actionPerformedBtnCerrar(arg0);
+		}
 		if (arg0.getSource() == btnBuscar) {
 			actionPerformedBtnBuscar(arg0);
 		}
@@ -315,22 +326,171 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	}
 	//ACEPTAR
 	protected void actionPerformedBtnAceptar(ActionEvent arg0) {
+		int numeroRetiro = leerNumeroRetiro();
+		try{
+			int numeroMatricula = leerNumeroMatricula();
+			if(btnAdicionar.isEnabled() == false){
+				Matricula m = am.buscar(numeroMatricula);
+				if(m != null){
+					int ok=confirmar(obtenerDatosAlumno() + "\n\n" + obtenerDatosCurso(), "¿ Desea retirar al alumno ?");
+					if(ok == 0){
+						Retiro nuevo = new Retiro(numeroRetiro, numeroMatricula, Fecha.fechaActual(), Fecha.horaActual());
+						ar.adicionar(nuevo);
+						btnAdicionar.setEnabled(true);
+						//MATRICULA SE DESACTIVA
+
+						am.actualizarArchivo();
+						//SE CAMBIA EL ESTADO A RETIRADO
+						Alumno a = aa.buscar(m.getcodAlumno());
+						a.setEstado(2);
+						aa.actualizarArchivo();
+						listar();
+						habilitarEntradas(false);
+					}
+					limpiar();
+					btnAdicionar.setEnabled(true);
+				}
+			}
+			if(btnModificar.isEnabled()==false){
+				Curso c = ac.buscar(leerCodigoCurso());
+				if(c != null){
+					Matricula m = am.buscar(numeroMatricula);
+					m.setcodCurso(leerCodigoCurso());
+					txtAsignatura.setText("" + c.getAsignatura());
+					am.actualizarArchivo();
+					habilitarEntradas(false);
+					btnModificar.setEnabled(true);
+				}
+				else{
+					error("Ingrese código de curso válido",txtCodigoCurso);
+					btnModificar.setEnabled(false);
+				}
+			}
+			listar();
+		}
+		catch(Exception e){
+			error("Ingrese un NÚMERO válido", txtNumeroMatricula);
+		}
 	}
 	//ADICIONAR
 	protected void actionPerformedBtnAdicionar(ActionEvent arg0) {
-		
+		habilitarBotones(true);
+		habilitarEntradas(true);
+		habilitarBusqueda(false);
+		btnAdicionar.setEnabled(false);
+		txtCodigoCurso.setEditable(false);
+		txtNumeroRetiro.setText("" + ar.codigoCorrelativo());
+		limpiar();
+		txtNumeroMatricula.requestFocus();
+	}
+	//CERRAR
+	protected void actionPerformedBtnCerrar(ActionEvent arg0) {
+		this.dispose();
 	}
 	//MODIFICAR
 	protected void actionPerformedBtnModificar(ActionEvent arg0) {
-	}
+		habilitarBotones(true);
+		btnBuscar.setEnabled(false);
+		btnModificar.setEnabled(false);
+		if (ar.tamaño() == 0) {
+			btnAceptar.setEnabled(false);
+			habilitarEntradas(false);
+			mensaje("No existen retiros");	
+		}
+		else {
+			habilitarBotones(true);
+			habilitarEntradas(false);
+			habilitarBusqueda(true);
+			btnModificar.setEnabled(false);
+			limpiar();
+			txtNumeroRetiro.setText("");
+			txtNumeroRetiro.requestFocus();
+		}
+	}	
 	//CONSULTAR
 	protected void actionPerformedBtnConsultar(ActionEvent arg0) {
+		habilitarBotones(true);
+		habilitarEntradas(false);
+		habilitarBusqueda(true);
+		btnConsultar.setEnabled(false);
+		limpiar();
+		txtNumeroRetiro.setText("");
+		txtNumeroRetiro.requestFocus();	
 	}
 	//ELIMINAR
 	protected void actionPerformedBtnEliminar(ActionEvent arg0) {
+		habilitarBotones(true);
+		habilitarBusqueda(true);
+		btnAceptar.setEnabled(false);
+		if(ar.tamaño()==0)
+			mensaje("No hay registro de retiros");
+		else{
+			habilitarEntradas(false);
+			try{
+				int numeroRetiro = leerNumeroRetiro();
+				Retiro r = ar.buscar(numeroRetiro);
+				Matricula m = am.buscar(r.getNumMatricula());
+				Alumno a = aa.buscar(m.getcodAlumno());
+				if (a.getEstado() == 2){
+					int ok = confirmar("¿Desea eliminar el registro?");
+					if(ok == 0){
+						ar.eliminar(ar.buscar(leerNumeroRetiro()));
+
+						am.actualizarArchivo();
+						a.setEstado(1);
+						aa.actualizarArchivo();
+						listar();
+						limpiar();
+						habilitarBusqueda(false);
+						editarFila();
+					}
+				}
+				else{
+					mensaje("El alumno no está retirado");
+				}
+				txtNumeroRetiro.setText("");
+			}
+			catch(Exception e){
+				txtNumeroRetiro.setText("");
+				txtNumeroRetiro.requestFocus();
+			}
+		}		
 	}
 	//BUSCAR
 	protected void actionPerformedBtnBuscar(ActionEvent arg0) {
+		try{
+			int numeroRetiro = leerNumeroRetiro();
+			Retiro r = ar.buscar(numeroRetiro);
+			Matricula m = am.buscar(r.getNumMatricula());
+			Curso c = ac.buscar(m.getcodCurso());
+			Alumno a = aa.buscar(m.getcodAlumno());
+			if(btnModificar.isEnabled() == false){
+				if(r != null){
+					txtNumeroMatricula.setText("" + r.getNumMatricula());
+					txtCodigoCurso.setText("" + m.getcodCurso());
+					txtAlumno.setText("" + a.getNombre()+" "+ a.getApellidos());
+					txtAsignatura.setText("" + c.getAsignatura());
+					habilitarEntradas(true);
+					txtNumeroMatricula.setEditable(false);
+					btnModificar.setEnabled(false);
+					habilitarBusqueda(false);
+				}
+			}
+			else{
+				if(r != null){
+					txtNumeroMatricula.setText("" + r.getNumMatricula());
+					txtCodigoCurso.setText("" + m.getcodCurso());
+					txtAlumno.setText("" + a.getNombre()+" "+ a.getApellidos());
+					txtAsignatura.setText("" + c.getAsignatura());
+					habilitarEntradas(false);
+					habilitarBotones(true);
+					habilitarBusqueda(false);
+				}
+			}
+		}
+		catch (Exception e){
+			error("Ingrese número válido", txtNumeroRetiro);
+		}		
 	}
 	
 	public void keyReleased(KeyEvent e) {
@@ -339,7 +499,6 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	}
 	protected void keyPressedTblRetiro(KeyEvent e) {
 	}
-
 	public void mouseEntered(MouseEvent e) {
 	}
 	public void mouseExited(MouseEvent e) {
@@ -367,14 +526,13 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		}
 	}
 
-
-
 	protected void keyPressedTxtNumeroMatricula(KeyEvent e) {
 	}
 	protected void keyPressedTxtCodigoCurso(KeyEvent e) {
 	}
 	protected void keyPressedTxtNumeroRetiro(KeyEvent e) {
 	}
+	
 	//METODOS QUE VALIDEN LOS CARACTERES QUE SE INGRESEN	
 	public void soloNumeros(JTextField a){
 		a.addKeyListener(new KeyAdapter(){
@@ -409,5 +567,121 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 			arg0.consume();
 		}
 	}
+
+	//METODO MOSTRAR MENSAJE
+	void mensaje(String s) {
+		JOptionPane.showMessageDialog(this, s, "Información", 0);
+	}
+	//METODO MOSTRAR ERROR
+	void error(String s, JTextField txt) {
+		mensaje(s);
+		txt.setText("");
+		txt.requestFocus();
+	}
+	//METODO HABILITAR
+	void habilitarEntradas(boolean sino) {
+		btnAceptar.setEnabled(sino);
+		txtCodigoCurso.setEditable(sino);
+		txtNumeroMatricula.setEditable(sino);
+	}
+	//
+	void habilitarBotones(boolean sino) {
+		btnAdicionar.setEnabled(sino);
+		btnModificar.setEnabled(sino);
+		btnConsultar.setEnabled(sino);
+	}
+	//
+	void habilitarBusqueda(boolean sino){
+		btnBuscar.setEnabled(sino);
+		txtNumeroRetiro.setEditable(sino);
+	}
+	
+	//METODO LISTAR
+	void listar(){
+		int posFila = 0;
+		if (modelo.getRowCount() > 0)
+			posFila = tblRetiro.getSelectedRow();
+		if (modelo.getRowCount() == ar.tamaño() - 1)
+			posFila = ar.tamaño() - 1;
+		if (posFila == ar.tamaño())
+			posFila --;
+		modelo.setRowCount(0);
+		Retiro r;
+		for (int j=0; j<ar.tamaño(); j++) {
+			r = ar.obtener(j);
+			Matricula m = am.buscar(r.getNumMatricula());
+			Alumno a = aa.buscar(m.getcodAlumno());
+			Curso c = ac.buscar(m.getcodCurso());
+			Object[] fila = { r.getNumRetiro(),
+					          r.getNumMatricula(),
+					          a.getNombre()+" "+a.getApellidos(),
+					          c.getAsignatura(),
+					          r.getFecha(),
+					          r.getHora()};
+								
+			modelo.addRow(fila);
+		}
+		if (ar.tamaño() > 0)
+			tblRetiro.getSelectionModel().setSelectionInterval(posFila, posFila);
+	}
+	//METODO EDITAR FILA
+	void editarFila(){
+		if (ar.tamaño() == 0)
+			txtNumeroRetiro.setText("" + ar.codigoCorrelativo());
+		else {
+			Retiro r = ar.obtener(tblRetiro.getSelectedRow());
+			Matricula m = am.buscar(r.getNumMatricula());
+			Alumno a = aa.buscar(m.getcodAlumno());
+			Curso c = ac.buscar(m.getcodCurso());
+			txtNumeroRetiro.setText("" + r.getNumRetiro());
+			txtNumeroMatricula.setText("" + r.getNumMatricula());
+			txtCodigoCurso.setText("" + m.getcodCurso());
+			txtAlumno.setText("" + a.getNombre()+" "+a.getApellidos());
+			txtAsignatura.setText(""+c.getAsignatura());
+		}
+	}
+	//METODO LIMPIAR
+	void limpiar(){
+		txtNumeroMatricula.setText("");
+		txtCodigoCurso.setText("");
+		txtAlumno.setText("");
+		txtAsignatura.setText("");
+	}
+
+	//METODO PARA OBTENER DATO DEL ALUMNO
+	String obtenerDatosAlumno() {
+		Matricula m = am.buscar(leerNumeroMatricula());
+	    Alumno a = aa.buscar(m.getcodAlumno());
+	    return "Nombres :  " + a.getNombre() + "\n" +
+		       "Apellidos :  " + a.getApellidos();
+	}
+	
+	String obtenerDatosCurso() {
+		Matricula m = am.buscar(leerNumeroMatricula());
+	    Curso c = ac.buscar(m.getcodAlumno());
+	    return "Asignatura :  " + c.getAsignatura();
+	}
+	
+	//METODO LEER NUMERO RETIRO
+	int leerNumeroRetiro(){
+		return Integer.parseInt(txtNumeroRetiro.getText().trim());
+	}
+	//MÉTODO LEER NUMERO DE MATRICULA
+	int leerNumeroMatricula(){
+		return Integer.parseInt(txtNumeroMatricula.getText().trim());
+	}
+	//MÉTODO LEER CODIGO CURSO
+	int leerCodigoCurso(){
+		return Integer.parseInt(txtCodigoCurso.getText().trim());
+	}
+	//MÉTODOS QUE RETORNAN VALOR (CONFIRMAR)
+	int confirmar(String s) {
+		return JOptionPane.showConfirmDialog(this, s, "Alerta", 0, 1, null);
+	}
+	
+	int confirmar(String s1, String s2) {
+		return JOptionPane.showConfirmDialog(this, s1, s2, 0, 1, null);
+	}
 		
+
 }
