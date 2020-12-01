@@ -41,7 +41,5 @@ public class Matricula {
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
-	
-	
 
 }
