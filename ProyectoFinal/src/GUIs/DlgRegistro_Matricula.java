@@ -8,6 +8,13 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.ImageIcon;
 
 import Arreglos.ArregloCurso;
 import Arreglos.ArregloMatricula;
@@ -19,15 +26,10 @@ import FuncionGenerales.FuncionesGenerales;
 import Libreria.Fecha;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Desktop.Action;
 import java.awt.Font;
-import javax.swing.SwingConstants;
-import javax.swing.JScrollPane;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.ImageIcon;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
@@ -297,8 +299,8 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	ArregloCurso ac = new ArregloCurso();
 
 	private void obtenerCodCursos(){
-		ArregloCurso ac = new ArregloCurso();
 		Curso c;
+		cboCodCurso.removeAllItems();
 		for (int i = 0; i < ac.tamaño(); i++) {
 			c = ac.obtener(i);
 			cboCodCurso.addItem("" + c.getCodCurso());
@@ -307,6 +309,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	
 	private void obtenerCodAlumno() {
 		Alumno a;
+		cboCodAlumno.removeAllItems();
 		for (int i = 0; i < aa.tamaño(); i++) {
 			a = aa.obtener(i);
 			if (a.getEstado() == 0) {
@@ -317,6 +320,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	
 	private void obtenerNumMatricula() {
 		Matricula m;
+		cboNumMatricula.removeAllItems();
 		if (am.tamaño() == 0) {
 			cboNumMatricula.addItem("NO HAY");
 		}else {
@@ -364,17 +368,19 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	
 	
 	protected void BUSCAR(ActionEvent arg0) {
-		cboNumMatricula.setVisible(false);
-		txtNumMatricula.setVisible(true);
 		btnConsultar.setEnabled(true);
-		int numMatricula = Integer.parseInt((String) cboNumMatricula.getSelectedItem());
+		try {
+			int numMatricula = Integer.parseInt((String) cboNumMatricula.getSelectedItem());
 			FuncionesGenerales.MostrarDatos(Datos(numMatricula));
+		}catch (Exception e) {
+		}
 	}
 	private String Datos(int numMatricula) {
 		Matricula m = am.buscar(numMatricula);
 		Alumno a = aa.buscar(m.getcodAlumno());
-		Curso c = ac.buscar(m.getcodAlumno());
-		String Dato = "Alumno: " + a.getNombre() + " " + a.getApellidos();
+		Curso c = ac.buscar(m.getcodCurso());
+		String Dato = "Alumno: " + a.getNombre() + " " + a.getApellidos() + "\n" +
+					  "Curso: " + c.getAsignatura();
 		return Dato;
 	}
 	protected void ACEPTAR(ActionEvent arg0) {
@@ -390,11 +396,13 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 						Matricula nueva = new Matricula(numMatricula, codAlumno, codCurso, fecha, hora);
 						am.adicionar(nueva);
 						btnAdicionar.setEnabled(true);
-						//HHHHHHHHHHHHHHHHHHHHHHHhhhH\\
+
 						Alumno a = aa.buscar(codAlumno);
 						a.setEstado(1);
 						aa.actualizarArchivo();
-						cboCodAlumno.removeItem(cboCodAlumno.getSelectedItem());
+//						cboCodAlumno.removeItem(cboCodAlumno.getSelectedItem());
+						obtenerCodAlumno();
+						obtenerNumMatricula();
 					}
 					if (btnModificar.isEnabled() == false) {
 						Matricula m = am.buscar(numMatricula);
@@ -405,13 +413,12 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 					Listar();
 					HabilitarEntradas(false);
 				} catch (Exception e) {
-					FuncionesGenerales.error("NO HAY CURSOS");
+					FuncionesGenerales.error("SELECCIONA UN CURSOS");
 				}
 			}catch (Exception e) {
-				FuncionesGenerales.error("NO EXISTEN ALUMNOS PARA AGREGAR");
+				FuncionesGenerales.error("SELECCIONA UN ALUMNOS PARA AGREGAR");
 			}			
 		}catch (Exception e) {
-			FuncionesGenerales.error("DEBES INGRESAR UN NUMERO");
 		}
 	}
 	
@@ -425,6 +432,42 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		HabilitarEntradas(false);
 	}
 	protected void ELIMINAR(ActionEvent arg0) {
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
+		btnEliminar.setEnabled(false);
+		btnBuscar.setEnabled(false);
+		if (am.tamaño() == 0) {
+			FuncionesGenerales.error("No existen matriculas para eliminar");
+			btnEliminar.setEnabled(true);
+		}
+		else {
+			editarFila();
+			HabilitarEntradas(false);
+			if (SE_PUEDE_ELIMINAR()) {
+				int confirmacion = FuncionesGenerales.confirmar("DESEA ELIMINAR ESTA MATRICULA?");
+				if (confirmacion == 0) {
+					Alumno a = aa.buscar(leerCodAlumno());
+					am.eliminar(am.buscar(leerNumMatricula()));
+					Listar();
+					editarFila();
+					a.setEstado(0);
+					aa.actualizarArchivo();
+					obtenerCodAlumno();
+
+				}
+				btnEliminar.setEnabled(true);
+			}
+			else {
+				FuncionesGenerales.error("NO SE PUEDE ELIMINAR ESTA MATRICULA");
+			}
+		}
+	}
+	private boolean SE_PUEDE_ELIMINAR() {
+		Alumno a = aa.buscar(leerCodAlumno());
+		if (a.getEstado() != 2) {
+			return true;
+		}
+		return false;
+		
 	}
 	protected void ADICIONAR(ActionEvent arg0) {
 		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
@@ -438,6 +481,18 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		HabilitarEntradas(true);
 	}
 	protected void MODIFICAR(ActionEvent arg0) {
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
+		btnModificar.setEnabled(false);
+		btnBuscar.setEnabled(false);
+		if (ac.tamaño() == 0) {
+			btnAceptar.setEnabled(false);
+			HabilitarEntradas(false);
+			FuncionesGenerales.error("No existen Matriculas");
+			btnModificar.setEnabled(true);
+		}else {
+			editarFila();
+			cboCodCurso.setEnabled(true);
+		}
 	}
 	
 	
@@ -448,7 +503,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		txtCodCurso.setText("" + cboCodCurso.getSelectedItem());
 	}
 	protected void COLOCAR_NUM_MATRICULA(ActionEvent arg0) {
-		
+		txtNumMatricula.setText("" + cboNumMatricula.getSelectedItem());
 	}
 	
 	protected void CERRAR(ActionEvent arg0) {
@@ -520,28 +575,13 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		cboCodCurso.setEnabled(X);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == tblMatricula) {
 			mouseClickedTblMatricula(e);
 		}
 	}
 	public void mouseEntered(MouseEvent e) {
+		tblMatricula.setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
 	public void mouseExited(MouseEvent e) {
 	}
@@ -553,6 +593,9 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		txtNumMatricula.setEditable(false);
 		HabilitarEntradas(false);
 		FuncionesGenerales.HabilitarBotones(true, btnAdicionar, btnConsultar, btnEliminar, btnModificar, btnAdicionar, btnConsultar);
+		cboNumMatricula.setVisible(false);
+		txtNumMatricula.setVisible(true);
+		editarFila();
 	}
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == tblMatricula) {
