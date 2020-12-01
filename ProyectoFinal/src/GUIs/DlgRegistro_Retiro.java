@@ -20,16 +20,37 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
+import java.awt.event.KeyAdapter;
 
-public class DlgRegistro_Retiro extends JDialog {
 
-	private final JPanel txtResultado = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTable table;
+//IMPORTES
+import Clases.*;
+import Libreria.Fecha;
+import Arreglos.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+
+public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyListener, MouseListener {
+
+	private final JPanel contentPanel = new JPanel();
+	private JTextField txtNumeroRetiro;
+	private JTextField txtNumeroMatricula;
+	private JTextField txtCodigoCurso;
+	private JTextField txtAlumno;
+	private JTextField txtAsignatura;
+	private JButton btnAceptar;
+	private JButton btnAdicionar;
+	private JButton btnModificar;
+	private JButton btnConsultar;
+	private JButton btnEliminar;
+	private JButton btnBuscar;
+	private JTable tblRetiro;
+	private JScrollPane scrollPane;
+	private DefaultTableModel modelo;
+	
 
 	/**
 	 * Launch the application.
@@ -43,6 +64,15 @@ public class DlgRegistro_Retiro extends JDialog {
 			e.printStackTrace();
 		}
 	}
+	
+	//DECLARO LAS VARIABLES GLOBALES
+	ArregloRetiro ar = new ArregloRetiro(); 
+	ArregloMatricula am = new ArregloMatricula();
+	ArregloAlumno aa = new ArregloAlumno();
+	ArregloCurso ac = new ArregloCurso();
+	private JLabel label;
+	
+	
 
 	/**
 	 * Create the dialog.
@@ -53,17 +83,19 @@ public class DlgRegistro_Retiro extends JDialog {
 		setSize(700,500);
 		this.setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
-		txtResultado.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(txtResultado, BorderLayout.CENTER);
-		txtResultado.setLayout(null);
+		contentPanel.setBackground(Color.LIGHT_GRAY);
+		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
 		
 		JLabel lblMantenimienoRetiro = new JLabel("MANTENIMIENO | RETIRO");
 		lblMantenimienoRetiro.setForeground(Color.DARK_GRAY);
 		lblMantenimienoRetiro.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblMantenimienoRetiro.setBounds(10, 5, 220, 20);
-		txtResultado.add(lblMantenimienoRetiro);
+		contentPanel.add(lblMantenimienoRetiro);
 		
-		JButton btnConsultar = new JButton("CONSULTAR");
+		btnConsultar = new JButton("CONSULTAR");
+		btnConsultar.addActionListener(this);
 		btnConsultar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnConsultar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnConsultar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
@@ -77,10 +109,11 @@ public class DlgRegistro_Retiro extends JDialog {
 		btnConsultar.setBorderPainted(false);
 		btnConsultar.setBorder(null);
 		btnConsultar.setBackground(Color.LIGHT_GRAY);
-		btnConsultar.setBounds(557, 41, 110, 40);
-		txtResultado.add(btnConsultar);
+		btnConsultar.setBounds(557, 133, 110, 40);
+		contentPanel.add(btnConsultar);
 		
-		JButton btnAdicionar = new JButton("ADICIONAR");
+		btnAdicionar = new JButton("ADICIONAR");
+		btnAdicionar.addActionListener(this);
 		btnAdicionar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnAdicionar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnAdicionar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
@@ -94,10 +127,11 @@ public class DlgRegistro_Retiro extends JDialog {
 		btnAdicionar.setBorderPainted(false);
 		btnAdicionar.setBorder(null);
 		btnAdicionar.setBackground(Color.LIGHT_GRAY);
-		btnAdicionar.setBounds(557, 91, 110, 40);
-		txtResultado.add(btnAdicionar);
+		btnAdicionar.setBounds(557, 31, 110, 40);
+		contentPanel.add(btnAdicionar);
 		
-		JButton btnModificar = new JButton("MODIFICAR");
+		btnModificar = new JButton("MODIFICAR");
+		btnModificar.addActionListener(this);
 		btnModificar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnModificar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnModificar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
@@ -111,10 +145,11 @@ public class DlgRegistro_Retiro extends JDialog {
 		btnModificar.setBorderPainted(false);
 		btnModificar.setBorder(null);
 		btnModificar.setBackground(Color.LIGHT_GRAY);
-		btnModificar.setBounds(557, 141, 110, 40);
-		txtResultado.add(btnModificar);
+		btnModificar.setBounds(557, 82, 110, 40);
+		contentPanel.add(btnModificar);
 		
-		JButton btnEliminar = new JButton("ELIMINAR");
+		btnEliminar = new JButton("ELIMINAR");
+		btnEliminar.addActionListener(this);
 		btnEliminar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnEliminar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnEliminar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
@@ -128,63 +163,67 @@ public class DlgRegistro_Retiro extends JDialog {
 		btnEliminar.setBorderPainted(false);
 		btnEliminar.setBorder(null);
 		btnEliminar.setBackground(Color.LIGHT_GRAY);
-		btnEliminar.setBounds(557, 191, 110, 40);
-		txtResultado.add(btnEliminar);
+		btnEliminar.setBounds(557, 180, 110, 40);
+		contentPanel.add(btnEliminar);
 		
-		JLabel lblCodigo = new JLabel("CODIGO: ");
-		lblCodigo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCodigo.setBounds(10, 38, 64, 20);
-		txtResultado.add(lblCodigo);
+		JLabel lblNumeroRetiro = new JLabel("N\u00B0 DE RETIRO");
+		lblNumeroRetiro.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNumeroRetiro.setBounds(10, 38, 110, 20);
+		contentPanel.add(lblNumeroRetiro);
 		
-		JLabel lblNombre = new JLabel("NOMBRES:");
-		lblNombre.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNombre.setBounds(10, 68, 70, 20);
-		txtResultado.add(lblNombre);
+		JLabel lnlNumeroMatricula = new JLabel("N\u00B0 MATR\u00CDCULA");
+		lnlNumeroMatricula.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lnlNumeroMatricula.setBounds(10, 68, 110, 20);
+		contentPanel.add(lnlNumeroMatricula);
 		
-		JLabel lblApellidos = new JLabel("APELLIDOS:");
-		lblApellidos.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblApellidos.setBounds(10, 98, 78, 20);
-		txtResultado.add(lblApellidos);
+		JLabel lblcodigoCurso = new JLabel("C\u00D3DIGO CURSO");
+		lblcodigoCurso.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblcodigoCurso.setBounds(10, 98, 121, 20);
+		contentPanel.add(lblcodigoCurso);
 		
-		JLabel lblDni = new JLabel("DNI:");
-		lblDni.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblDni.setBounds(10, 128, 30, 20);
-		txtResultado.add(lblDni);
+		txtNumeroRetiro = new JTextField();
+		txtNumeroRetiro.setBounds(141, 36, 86, 20);
+		contentPanel.add(txtNumeroRetiro);
+		txtNumeroRetiro.setColumns(10);
 		
-		textField = new JTextField();
-		textField.setBounds(101, 36, 86, 20);
-		txtResultado.add(textField);
-		textField.setColumns(10);
+		txtNumeroRetiro.setEditable(false);		
+		soloNumeros(txtNumeroRetiro);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(101, 70, 220, 20);
-		txtResultado.add(textField_1);
+		txtNumeroMatricula = new JTextField();
+		txtNumeroMatricula.addKeyListener(this);
+		txtNumeroMatricula.setColumns(10);
+		txtNumeroMatricula.setBounds(141, 70, 220, 20);
+		contentPanel.add(txtNumeroMatricula);
+		soloNumeros(txtNumeroMatricula);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(101, 100, 220, 20);
-		txtResultado.add(textField_2);
+
+		txtCodigoCurso = new JTextField();
+		txtCodigoCurso.addKeyListener(this);
+		txtCodigoCurso.setColumns(10);
+		txtCodigoCurso.setBounds(141, 100, 220, 20);
+		contentPanel.add(txtCodigoCurso);
+		soloNumeros(txtNumeroMatricula);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(101, 130, 86, 20);
-		txtResultado.add(textField_3);
+		txtAlumno = new JTextField();
+		txtAlumno.setColumns(10);
+		txtAlumno.setBounds(141, 130, 86, 20);
+		contentPanel.add(txtAlumno);
 		
-		JLabel lblCurso = new JLabel("CURSO:");
-		lblCurso.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblCurso.setBounds(10, 158, 64, 20);
-		txtResultado.add(lblCurso);
+		JLabel lblAlumno = new JLabel("ALUMNO");
+		lblAlumno.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblAlumno.setBounds(10, 129, 64, 20);
+		contentPanel.add(lblAlumno);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(101, 161, 86, 20);
-		txtResultado.add(textField_4);
+		txtAsignatura = new JTextField();
+		txtAsignatura.setColumns(10);
+		txtAsignatura.setBounds(141, 161, 86, 20);
+		contentPanel.add(txtAsignatura);
 		
-		JButton btnBuscar = new JButton("BUSCAR");
-		btnBuscar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
-		btnBuscar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
-		btnBuscar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
+		btnBuscar = new JButton("BUSCAR");
+		btnBuscar.addActionListener(this);
+		btnBuscar.setPressedIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_1.png"));
+		btnBuscar.setRolloverIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
+		btnBuscar.setIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
 		btnBuscar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnBuscar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnBuscar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -196,29 +235,19 @@ public class DlgRegistro_Retiro extends JDialog {
 		btnBuscar.setBorderPainted(false);
 		btnBuscar.setBorder(null);
 		btnBuscar.setBackground(Color.LIGHT_GRAY);
-		btnBuscar.setBounds(240, 24, 110, 40);
-		txtResultado.add(btnBuscar);
+		btnBuscar.setBounds(307, 27, 110, 40);
+		contentPanel.add(btnBuscar);
 		
-		JLabel lblEstado = new JLabel("ESTADO:");
-		lblEstado.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblEstado.setBounds(10, 188, 64, 20);
-		txtResultado.add(lblEstado);
+		JLabel lblAsignatura = new JLabel("ASIGNATURA");
+		lblAsignatura.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblAsignatura.setBounds(10, 160, 110, 20);
+		contentPanel.add(lblAsignatura);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"REGISTRADO", "MATRICULADO", "RETIRADO"}));
-		comboBox.setBounds(101, 191, 110, 22);
-		txtResultado.add(comboBox);
-		
-		table = new JTable();
-		table.setFillsViewportHeight(true);
-		table.setBounds(10, 249, 673, 240);
-		txtResultado.add(table);
-		
-		JButton btnAceptar = new JButton("ACEPTAR");
-		btnAceptar.setPressedIcon(new ImageIcon("imagenes\\BotonAceptar1.png"));
-		btnAceptar.setRolloverIcon(new ImageIcon("imagenes\\BotonAceptar2.png"));
-		btnAceptar.setIcon(new ImageIcon("imagenes\\BotonAceptar1.png"));
+		btnAceptar = new JButton("ACEPTAR");
+		btnAceptar.addActionListener(this);
+		btnAceptar.setPressedIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar1.png"));
+		btnAceptar.setRolloverIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar2.png"));
+		btnAceptar.setIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar2.png"));
 		btnAceptar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnAceptar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnAceptar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -230,8 +259,8 @@ public class DlgRegistro_Retiro extends JDialog {
 		btnAceptar.setBorderPainted(false);
 		btnAceptar.setBorder(null);
 		btnAceptar.setBackground(Color.LIGHT_GRAY);
-		btnAceptar.setBounds(221, 129, 110, 110);
-		txtResultado.add(btnAceptar);
+		btnAceptar.setBounds(307, 131, 110, 110);
+		contentPanel.add(btnAceptar);
 		
 		JButton btnCerrar = new JButton("");
 		btnCerrar.setPressedIcon(new ImageIcon("imagenes\\BOTON_CERRAR_1.png"));
@@ -241,6 +270,144 @@ public class DlgRegistro_Retiro extends JDialog {
 		btnCerrar.setContentAreaFilled(false);
 		btnCerrar.setBorderPainted(false);
 		btnCerrar.setBounds(662, 5, 28, 28);
-		txtResultado.add(btnCerrar);
+		contentPanel.add(btnCerrar);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 253, 680, 243);
+		contentPanel.add(scrollPane);
+		
+		tblRetiro = new JTable();
+		tblRetiro.addMouseListener(this);
+		tblRetiro.addKeyListener(this);
+		
+		tblRetiro.setFillsViewportHeight(true);
+		scrollPane.setViewportView(tblRetiro);
+		
+		modelo = new DefaultTableModel();
+		modelo.addColumn("Número");
+		modelo.addColumn("Matrícula");
+		modelo.addColumn("Alumno");
+		modelo.addColumn("Asignatura");
+		modelo.addColumn("Fecha");
+		modelo.addColumn("Hora");
+		tblRetiro.setModel(modelo);
+		
 	}
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == btnBuscar) {
+			actionPerformedBtnBuscar(arg0);
+		}
+		if (arg0.getSource() == btnEliminar) {
+			actionPerformedBtnEliminar(arg0);
+		}
+		if (arg0.getSource() == btnConsultar) {
+			actionPerformedBtnConsultar(arg0);
+		}
+		if (arg0.getSource() == btnModificar) {
+			actionPerformedBtnModificar(arg0);
+		}
+		if (arg0.getSource() == btnAdicionar) {
+			actionPerformedBtnAdicionar(arg0);
+		}
+		if (arg0.getSource() == btnAceptar) {
+			actionPerformedBtnAceptar(arg0);
+		}
+	}
+	//ACEPTAR
+	protected void actionPerformedBtnAceptar(ActionEvent arg0) {
+	}
+	//ADICIONAR
+	protected void actionPerformedBtnAdicionar(ActionEvent arg0) {
+		
+	}
+	//MODIFICAR
+	protected void actionPerformedBtnModificar(ActionEvent arg0) {
+	}
+	//CONSULTAR
+	protected void actionPerformedBtnConsultar(ActionEvent arg0) {
+	}
+	//ELIMINAR
+	protected void actionPerformedBtnEliminar(ActionEvent arg0) {
+	}
+	//BUSCAR
+	protected void actionPerformedBtnBuscar(ActionEvent arg0) {
+	}
+	
+	public void keyReleased(KeyEvent e) {
+	}
+	public void keyTyped(KeyEvent e) {
+	}
+	protected void keyPressedTblRetiro(KeyEvent e) {
+	}
+
+	public void mouseEntered(MouseEvent e) {
+	}
+	public void mouseExited(MouseEvent e) {
+	}
+	public void mousePressed(MouseEvent e) {
+	}
+	public void mouseReleased(MouseEvent e) {
+	}
+	protected void mouseClickedTblRetiro(MouseEvent e) {
+	}
+	public void keyPressed(KeyEvent e) {
+		if (e.getSource() == txtCodigoCurso) {
+			keyPressedTxtCodigoCurso(e);
+		}
+		if (e.getSource() == txtNumeroMatricula) {
+			keyPressedTxtNumeroMatricula(e);
+		}
+		if (e.getSource() == tblRetiro) {
+			keyPressedTblRetiro(e);
+		}
+	}
+	public void mouseClicked(MouseEvent e) {
+		if (e.getSource() == tblRetiro) {
+			mouseClickedTblRetiro(e);
+		}
+	}
+
+
+
+	protected void keyPressedTxtNumeroMatricula(KeyEvent e) {
+	}
+	protected void keyPressedTxtCodigoCurso(KeyEvent e) {
+	}
+	protected void keyPressedTxtNumeroRetiro(KeyEvent e) {
+	}
+	//METODOS QUE VALIDEN LOS CARACTERES QUE SE INGRESEN	
+	public void soloNumeros(JTextField a){
+		a.addKeyListener(new KeyAdapter(){
+			public void keyTyped(KeyEvent e){
+				char c=e.getKeyChar();
+				if(!Character.isDigit(c)){
+					e.consume();
+				}
+			}
+			public void keyPressed(KeyEvent e) {
+				if (e.getSource() == txtNumeroRetiro) {
+					keyPressedTxtNumeroRetiro(e);
+				}
+			}
+		});
+	}
+	
+	protected void keyTypedTxtNumeroRetiro(KeyEvent arg0) {
+		if(txtNumeroRetiro.getText().length() >= 6){
+			arg0.consume();
+		}
+	}
+	
+	protected void keyTypedTxtNumeroMatricula(KeyEvent arg0) {
+		if(txtNumeroMatricula.getText().length() >= 6){
+			arg0.consume();
+		}
+	}
+	
+	protected void keyTypedTxtCodigoCurso(KeyEvent arg0) {
+		if(txtCodigoCurso.getText().length() >= 4){
+			arg0.consume();
+		}
+	}
+		
 }
