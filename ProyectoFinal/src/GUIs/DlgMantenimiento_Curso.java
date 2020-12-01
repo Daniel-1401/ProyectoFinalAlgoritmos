@@ -487,16 +487,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 			btnEliminar.setEnabled(true);
 		}
 	}
-	
-	
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	
+
 	ArregloMatricula arregloMatricula = new ArregloMatricula();
 	private boolean ExistenAlumno(int codCurso){
 		for (int i = 0; i < arregloMatricula.tamaño(); i++) {
@@ -507,15 +498,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 		}
 		return true;
 	}
-	
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	//FALTA LLENAR
-	
+
 	private void Listar() {
 		int posFila = 0;
 		if (modelo.getRowCount() > 0) {
