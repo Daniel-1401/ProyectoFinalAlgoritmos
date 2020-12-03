@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.SystemColor;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,21 +29,22 @@ import Arreglos.ArregloAlumno;
 import Arreglos.ArregloCurso;
 import Arreglos.ArregloMatricula;
 import Arreglos.ArregloRetiro;
-//IMPORTES
+
 import Clases.Alumno;
 import Clases.Curso;
 import Clases.Matricula;
 import Clases.Retiro;
 import Libreria.Fecha;
+import FuncionGenerales.FuncionesGenerales;
+import javax.swing.JComboBox;
+
 
 public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyListener, MouseListener {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtNumeroRetiro;
-	private JTextField txtNumeroMatricula;
-	private JTextField txtCodigoCurso;
-	private JTextField txtAlumno;
-	private JTextField txtAsignatura;
+	private JTextField txtNumMatricula;
+	private JTextField txtCodCurso;
 	private JButton btnAceptar;
 	private JButton btnAdicionar;
 	private JButton btnModificar;
@@ -52,7 +54,10 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	private JTable tblRetiro;
 	private JScrollPane scrollPane;
 	private DefaultTableModel modelo;
-	
+	private JButton btnCerrar;
+	private JComboBox<String> cboNumeroRetiro;
+	private JComboBox<String> cboCodCurso;
+	private JComboBox<String> cboNumMatricula;
 
 	/**
 	 * Launch the application.
@@ -67,14 +72,10 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		}
 	}
 	
-	// CREO E INICIALIZO LOS OBJETOS DE LAS CLASES ARREGLO
 	ArregloRetiro ar = new ArregloRetiro(); 
 	ArregloMatricula am = new ArregloMatricula();
 	ArregloAlumno aa = new ArregloAlumno();
 	ArregloCurso ac = new ArregloCurso();
-	private JLabel label;
-	private JButton btnCerrar;
-	
 	
 
 	/**
@@ -82,16 +83,15 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	 */
 	public DlgRegistro_Retiro() {
 		setUndecorated(true);
+		setResizable(false);
 		setTitle("REGISTRO | RETIRO");
-		setSize(700,500);
-		this.setLocationRelativeTo(null);
+		setBounds(100,100,700,500);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBackground(Color.LIGHT_GRAY);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		JLabel lblMantenimienoRetiro = new JLabel("MANTENIMIENO | RETIRO");
+		JLabel lblMantenimienoRetiro = new JLabel("REGISTRO | RETIRO");
 		lblMantenimienoRetiro.setForeground(Color.DARK_GRAY);
 		lblMantenimienoRetiro.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblMantenimienoRetiro.setBounds(10, 5, 220, 20);
@@ -112,7 +112,7 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		btnConsultar.setBorderPainted(false);
 		btnConsultar.setBorder(null);
 		btnConsultar.setBackground(Color.LIGHT_GRAY);
-		btnConsultar.setBounds(557, 133, 110, 40);
+		btnConsultar.setBounds(557, 29, 110, 40);
 		contentPanel.add(btnConsultar);
 		
 		btnAdicionar = new JButton("ADICIONAR");
@@ -130,7 +130,7 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		btnAdicionar.setBorderPainted(false);
 		btnAdicionar.setBorder(null);
 		btnAdicionar.setBackground(Color.LIGHT_GRAY);
-		btnAdicionar.setBounds(557, 31, 110, 40);
+		btnAdicionar.setBounds(557, 79, 110, 40);
 		contentPanel.add(btnAdicionar);
 		
 		btnModificar = new JButton("MODIFICAR");
@@ -148,7 +148,7 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		btnModificar.setBorderPainted(false);
 		btnModificar.setBorder(null);
 		btnModificar.setBackground(Color.LIGHT_GRAY);
-		btnModificar.setBounds(557, 82, 110, 40);
+		btnModificar.setBounds(557, 130, 110, 40);
 		contentPanel.add(btnModificar);
 		
 		btnEliminar = new JButton("ELIMINAR");
@@ -185,48 +185,15 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		contentPanel.add(lblcodigoCurso);
 		
 		txtNumeroRetiro = new JTextField();
-		txtNumeroRetiro.setBounds(141, 36, 86, 20);
+		txtNumeroRetiro.setBounds(141, 35, 86, 20);
 		contentPanel.add(txtNumeroRetiro);
 		txtNumeroRetiro.setColumns(10);
 		
-		txtNumeroRetiro.setEditable(false);		
-		soloNumeros(txtNumeroRetiro);
-		
-		txtNumeroMatricula = new JTextField();
-		txtNumeroMatricula.addKeyListener(this);
-		txtNumeroMatricula.setColumns(10);
-		txtNumeroMatricula.setBounds(141, 70, 220, 20);
-		contentPanel.add(txtNumeroMatricula);
-		soloNumeros(txtNumeroMatricula);
-		
-
-		txtCodigoCurso = new JTextField();
-		txtCodigoCurso.addKeyListener(this);
-		txtCodigoCurso.setColumns(10);
-		txtCodigoCurso.setBounds(141, 100, 220, 20);
-		contentPanel.add(txtCodigoCurso);
-		soloNumeros(txtNumeroMatricula);
-		
-		txtAlumno = new JTextField();
-		txtAlumno.setColumns(10);
-		txtAlumno.setBounds(141, 130, 86, 20);
-		contentPanel.add(txtAlumno);
-		
-		JLabel lblAlumno = new JLabel("ALUMNO");
-		lblAlumno.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblAlumno.setBounds(10, 129, 64, 20);
-		contentPanel.add(lblAlumno);
-		
-		txtAsignatura = new JTextField();
-		txtAsignatura.setColumns(10);
-		txtAsignatura.setBounds(141, 161, 86, 20);
-		contentPanel.add(txtAsignatura);
-		
 		btnBuscar = new JButton("BUSCAR");
 		btnBuscar.addActionListener(this);
-		btnBuscar.setPressedIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_1.png"));
-		btnBuscar.setRolloverIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
-		btnBuscar.setIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BOTON_AME_2.png"));
+		btnBuscar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
+		btnBuscar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnBuscar.setIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnBuscar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnBuscar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnBuscar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -238,19 +205,14 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		btnBuscar.setBorderPainted(false);
 		btnBuscar.setBorder(null);
 		btnBuscar.setBackground(Color.LIGHT_GRAY);
-		btnBuscar.setBounds(307, 27, 110, 40);
+		btnBuscar.setBounds(141, 168, 110, 40);
 		contentPanel.add(btnBuscar);
-		
-		JLabel lblAsignatura = new JLabel("ASIGNATURA");
-		lblAsignatura.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblAsignatura.setBounds(10, 160, 110, 20);
-		contentPanel.add(lblAsignatura);
 		
 		btnAceptar = new JButton("ACEPTAR");
 		btnAceptar.addActionListener(this);
-		btnAceptar.setPressedIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar1.png"));
-		btnAceptar.setRolloverIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar2.png"));
-		btnAceptar.setIcon(new ImageIcon("C:\\Users\\Adonias\\Desktop\\ProyectoFinalAlgoritmos\\ProyectoFinal\\imagenes\\BotonAceptar2.png"));
+		btnAceptar.setPressedIcon(new ImageIcon("imagenes\\BotonAceptar1.png"));
+		btnAceptar.setRolloverIcon(new ImageIcon("imagenes\\BotonAceptar2.png"));
+		btnAceptar.setIcon(new ImageIcon("imagenes\\BotonAceptar1.png"));
 		btnAceptar.setVerticalTextPosition(SwingConstants.CENTER);
 		btnAceptar.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnAceptar.setFont(new Font("Consolas", Font.BOLD, 16));
@@ -262,7 +224,7 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		btnAceptar.setBorderPainted(false);
 		btnAceptar.setBorder(null);
 		btnAceptar.setBackground(Color.LIGHT_GRAY);
-		btnAceptar.setBounds(307, 131, 110, 110);
+		btnAceptar.setBounds(10, 133, 110, 110);
 		contentPanel.add(btnAceptar);
 		
 		btnCerrar = new JButton("");
@@ -288,216 +250,115 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		scrollPane.setViewportView(tblRetiro);
 		
 		modelo = new DefaultTableModel();
-		modelo.addColumn("Número");
-		modelo.addColumn("Matrícula");
-		modelo.addColumn("Alumno");
-		modelo.addColumn("Asignatura");
+		modelo.addColumn("NumNúmero");
+		modelo.addColumn("NumMatrícula");
 		modelo.addColumn("Fecha");
 		modelo.addColumn("Hora");
 		tblRetiro.setModel(modelo);
 		
+		cboNumeroRetiro = new JComboBox<String>();
+		cboNumeroRetiro.addActionListener(this);
+		cboNumeroRetiro.setBounds(142, 35, 110, 20);
+		contentPanel.add(cboNumeroRetiro);
+		obtenerNumeroRetiro();
+		
+		cboCodCurso = new JComboBox<String>();
+		cboCodCurso.setBounds(141, 100, 111, 20);
+		contentPanel.add(cboCodCurso);
+		obtenerCodigoCurso();
+		
+		cboNumMatricula = new JComboBox<String>();
+		cboNumMatricula.setBounds(141, 68, 112, 20);
+		contentPanel.add(cboNumMatricula);
+		obtenerNumMatricula();
+		
+		txtNumMatricula = new JTextField();
+		txtNumMatricula.setEditable(false);
+		txtNumMatricula.setColumns(10);
+		txtNumMatricula.setBounds(141, 68, 86, 20);
+		contentPanel.add(txtNumMatricula);
+		
+		txtCodCurso = new JTextField();
+		txtCodCurso.setEditable(false);
+		txtCodCurso.setColumns(10);
+		txtCodCurso.setBounds(141, 100, 86, 20);
+		contentPanel.add(txtCodCurso);
+		
+		cboNumeroRetiro.setVisible(false);
+		cboCodCurso.setVisible(false);
+		cboNumMatricula.setVisible(false);
 		habilitarEntradas(false);
 		listar();
 		editarFila();
+		txtNumeroRetiro.setEditable(false);
 		
 	}
+	
 	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == cboNumeroRetiro) {
+			COLOCAR_NUMERO_RETIRO(arg0);
+		}
 		if (arg0.getSource() == btnCerrar) {
-			actionPerformedBtnCerrar(arg0);
+			CERRAR(arg0);
 		}
 		if (arg0.getSource() == btnBuscar) {
-			actionPerformedBtnBuscar(arg0);
+			BUSCAR(arg0);
 		}
 		if (arg0.getSource() == btnEliminar) {
-			actionPerformedBtnEliminar(arg0);
+			ELIMINAR(arg0);
 		}
 		if (arg0.getSource() == btnConsultar) {
-			actionPerformedBtnConsultar(arg0);
+			CONSULTAR(arg0);
 		}
 		if (arg0.getSource() == btnModificar) {
-			actionPerformedBtnModificar(arg0);
+			MODIFICAR(arg0);
 		}
 		if (arg0.getSource() == btnAdicionar) {
-			actionPerformedBtnAdicionar(arg0);
+			ADICIONAR(arg0);
 		}
 		if (arg0.getSource() == btnAceptar) {
-			actionPerformedBtnAceptar(arg0);
+			ACEPTAR(arg0);
 		}
 	}
-	//ACEPTAR
-	protected void actionPerformedBtnAceptar(ActionEvent arg0) {
-		int numeroRetiro = leerNumeroRetiro();
-		try{
-			int numeroMatricula = leerNumeroMatricula();
-			if(btnAdicionar.isEnabled() == false){
-				Matricula m = am.buscar(numeroMatricula);
-				if(m != null){
-					int ok=confirmar(obtenerDatosAlumno() + "\n\n" + obtenerDatosCurso(), "¿ Desea retirar al alumno ?");
-					if(ok == 0){
-						Retiro nuevo = new Retiro(numeroRetiro, numeroMatricula, Fecha.fechaActual(), Fecha.horaActual());
-						ar.adicionar(nuevo);
-						btnAdicionar.setEnabled(true);
-						//MATRICULA SE DESACTIVA
 
-						am.actualizarArchivo();
-						//SE CAMBIA EL ESTADO A RETIRADO
-						Alumno a = aa.buscar(m.getcodAlumno());
-						a.setEstado(2);
-						aa.actualizarArchivo();
-						listar();
-						habilitarEntradas(false);
-					}
-					limpiar();
-					btnAdicionar.setEnabled(true);
-				}
-			}
-			if(btnModificar.isEnabled()==false){
-				Curso c = ac.buscar(leerCodigoCurso());
-				if(c != null){
-					Matricula m = am.buscar(numeroMatricula);
-					m.setcodCurso(leerCodigoCurso());
-					txtAsignatura.setText("" + c.getAsignatura());
-					am.actualizarArchivo();
-					habilitarEntradas(false);
-					btnModificar.setEnabled(true);
-				}
-				else{
-					error("Ingrese código de curso válido",txtCodigoCurso);
-					btnModificar.setEnabled(false);
-				}
-			}
-			listar();
-		}
-		catch(Exception e){
-			error("Ingrese un NÚMERO válido", txtNumeroMatricula);
-		}
+	protected void ACEPTAR(ActionEvent arg0) {
+		
 	}
-	//ADICIONAR
-	protected void actionPerformedBtnAdicionar(ActionEvent arg0) {
-		habilitarBotones(true);
-		habilitarEntradas(true);
-		habilitarBusqueda(false);
+
+	protected void ADICIONAR(ActionEvent arg0) {
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnConsultar, btnModificar, btnAceptar, btnAdicionar);
 		btnAdicionar.setEnabled(false);
-		txtCodigoCurso.setEditable(false);
-		txtNumeroRetiro.setText("" + ar.codigoCorrelativo());
-		limpiar();
-		txtNumeroMatricula.requestFocus();
+		txtNumMatricula.setVisible(false);
+		cboNumMatricula.setVisible(true);
+		editarFila();
 	}
-	//CERRAR
-	protected void actionPerformedBtnCerrar(ActionEvent arg0) {
+
+	protected void CERRAR(ActionEvent arg0) {
 		this.dispose();
 	}
-	//MODIFICAR
-	protected void actionPerformedBtnModificar(ActionEvent arg0) {
-		habilitarBotones(true);
-		btnBuscar.setEnabled(false);
-		btnModificar.setEnabled(false);
-		if (ar.tamaño() == 0) {
-			btnAceptar.setEnabled(false);
-			habilitarEntradas(false);
-			mensaje("No existen retiros");	
-		}
-		else {
-			habilitarBotones(true);
-			habilitarEntradas(false);
-			habilitarBusqueda(true);
-			btnModificar.setEnabled(false);
-			limpiar();
-			txtNumeroRetiro.setText("");
-			txtNumeroRetiro.requestFocus();
-		}
-	}	
-	//CONSULTAR
-	protected void actionPerformedBtnConsultar(ActionEvent arg0) {
-		habilitarBotones(true);
-		habilitarEntradas(false);
-		habilitarBusqueda(true);
-		btnConsultar.setEnabled(false);
-		limpiar();
-		txtNumeroRetiro.setText("");
-		txtNumeroRetiro.requestFocus();	
-	}
-	//ELIMINAR
-	protected void actionPerformedBtnEliminar(ActionEvent arg0) {
-		habilitarBotones(true);
-		habilitarBusqueda(true);
-		btnAceptar.setEnabled(false);
-		if(ar.tamaño()==0)
-			mensaje("No hay registro de retiros");
-		else{
-			habilitarEntradas(false);
-			try{
-				int numeroRetiro = leerNumeroRetiro();
-				Retiro r = ar.buscar(numeroRetiro);
-				Matricula m = am.buscar(r.getNumMatricula());
-				Alumno a = aa.buscar(m.getcodAlumno());
-				if (a.getEstado() == 2){
-					int ok = confirmar("¿Desea eliminar el registro?");
-					if(ok == 0){
-						ar.eliminar(ar.buscar(leerNumeroRetiro()));
 
-						am.actualizarArchivo();
-						a.setEstado(1);
-						aa.actualizarArchivo();
-						listar();
-						limpiar();
-						habilitarBusqueda(false);
-						editarFila();
-					}
-				}
-				else{
-					mensaje("El alumno no está retirado");
-				}
-				txtNumeroRetiro.setText("");
-			}
-			catch(Exception e){
-				txtNumeroRetiro.setText("");
-				txtNumeroRetiro.requestFocus();
-			}
-		}		
+	protected void MODIFICAR(ActionEvent arg0) {
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnConsultar, btnModificar, btnAceptar, btnAdicionar);
+		btnModificar.setEnabled(false);
+		txtCodCurso.setVisible(false);
+		cboCodCurso.setVisible(true);
+	}	
+
+	protected void CONSULTAR(ActionEvent arg0) {
+		
 	}
-	//BUSCAR
-	protected void actionPerformedBtnBuscar(ActionEvent arg0) {
-		try{
-			int numeroRetiro = leerNumeroRetiro();
-			Retiro r = ar.buscar(numeroRetiro);
-			Matricula m = am.buscar(r.getNumMatricula());
-			Curso c = ac.buscar(m.getcodCurso());
-			Alumno a = aa.buscar(m.getcodAlumno());
-			if(btnModificar.isEnabled() == false){
-				if(r != null){
-					txtNumeroMatricula.setText("" + r.getNumMatricula());
-					txtCodigoCurso.setText("" + m.getcodCurso());
-					txtAlumno.setText("" + a.getNombre()+" "+ a.getApellidos());
-					txtAsignatura.setText("" + c.getAsignatura());
-					habilitarEntradas(true);
-					txtNumeroMatricula.setEditable(false);
-					btnModificar.setEnabled(false);
-					habilitarBusqueda(false);
-				}
-			}
-			else{
-				if(r != null){
-					txtNumeroMatricula.setText("" + r.getNumMatricula());
-					txtCodigoCurso.setText("" + m.getcodCurso());
-					txtAlumno.setText("" + a.getNombre()+" "+ a.getApellidos());
-					txtAsignatura.setText("" + c.getAsignatura());
-					habilitarEntradas(false);
-					habilitarBotones(true);
-					habilitarBusqueda(false);
-				}
-			}
-		}
-		catch (Exception e){
-			error("Ingrese número válido", txtNumeroRetiro);
-		}		
+
+	protected void ELIMINAR(ActionEvent arg0) {
+		
+	}
+	
+	protected void BUSCAR(ActionEvent arg0) {
+		
 	}
 	
 	public void keyReleased(KeyEvent e) {
 	}
 	public void keyTyped(KeyEvent e) {
-	}
-	protected void keyPressedTblRetiro(KeyEvent e) {
 	}
 	public void mouseEntered(MouseEvent e) {
 	}
@@ -507,96 +368,13 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	}
 	public void mouseReleased(MouseEvent e) {
 	}
-	protected void mouseClickedTblRetiro(MouseEvent e) {
-	}
-	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == txtCodigoCurso) {
-			keyPressedTxtCodigoCurso(e);
-		}
-		if (e.getSource() == txtNumeroMatricula) {
-			keyPressedTxtNumeroMatricula(e);
-		}
-		if (e.getSource() == tblRetiro) {
-			keyPressedTblRetiro(e);
-		}
-	}
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == tblRetiro) {
-			mouseClickedTblRetiro(e);
-		}
 	}
-
-	protected void keyPressedTxtNumeroMatricula(KeyEvent e) {
+	void habilitarEntradas(boolean X) {
+		btnAceptar.setEnabled(X);
+		cboCodCurso.setEnabled(X);
+		cboNumeroRetiro.setEnabled(X);
 	}
-	protected void keyPressedTxtCodigoCurso(KeyEvent e) {
-	}
-	protected void keyPressedTxtNumeroRetiro(KeyEvent e) {
-	}
-	
-	//METODOS QUE VALIDEN LOS CARACTERES QUE SE INGRESEN	
-	public void soloNumeros(JTextField a){
-		a.addKeyListener(new KeyAdapter(){
-			public void keyTyped(KeyEvent e){
-				char c=e.getKeyChar();
-				if(!Character.isDigit(c)){
-					e.consume();
-				}
-			}
-			public void keyPressed(KeyEvent e) {
-				if (e.getSource() == txtNumeroRetiro) {
-					keyPressedTxtNumeroRetiro(e);
-				}
-			}
-		});
-	}
-	
-	protected void keyTypedTxtNumeroRetiro(KeyEvent arg0) {
-		if(txtNumeroRetiro.getText().length() >= 6){
-			arg0.consume();
-		}
-	}
-	
-	protected void keyTypedTxtNumeroMatricula(KeyEvent arg0) {
-		if(txtNumeroMatricula.getText().length() >= 6){
-			arg0.consume();
-		}
-	}
-	
-	protected void keyTypedTxtCodigoCurso(KeyEvent arg0) {
-		if(txtCodigoCurso.getText().length() >= 4){
-			arg0.consume();
-		}
-	}
-
-	//METODO MOSTRAR MENSAJE
-	void mensaje(String s) {
-		JOptionPane.showMessageDialog(this, s, "Información", 0);
-	}
-	//METODO MOSTRAR ERROR
-	void error(String s, JTextField txt) {
-		mensaje(s);
-		txt.setText("");
-		txt.requestFocus();
-	}
-	//METODO HABILITAR
-	void habilitarEntradas(boolean sino) {
-		btnAceptar.setEnabled(sino);
-		txtCodigoCurso.setEditable(sino);
-		txtNumeroMatricula.setEditable(sino);
-	}
-	//
-	void habilitarBotones(boolean sino) {
-		btnAdicionar.setEnabled(sino);
-		btnModificar.setEnabled(sino);
-		btnConsultar.setEnabled(sino);
-	}
-	//
-	void habilitarBusqueda(boolean sino){
-		btnBuscar.setEnabled(sino);
-		txtNumeroRetiro.setEditable(sino);
-	}
-	
-	//METODO LISTAR
 	void listar(){
 		int posFila = 0;
 		if (modelo.getRowCount() > 0)
@@ -614,8 +392,6 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 			Curso c = ac.buscar(m.getcodCurso());
 			Object[] fila = { r.getNumRetiro(),
 					          r.getNumMatricula(),
-					          a.getNombre()+" "+a.getApellidos(),
-					          c.getAsignatura(),
 					          r.getFecha(),
 					          r.getHora()};
 								
@@ -624,64 +400,79 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		if (ar.tamaño() > 0)
 			tblRetiro.getSelectionModel().setSelectionInterval(posFila, posFila);
 	}
-	//METODO EDITAR FILA
 	void editarFila(){
 		if (ar.tamaño() == 0)
-			txtNumeroRetiro.setText("" + ar.codigoCorrelativo());
+			limpiar();
 		else {
 			Retiro r = ar.obtener(tblRetiro.getSelectedRow());
-			Matricula m = am.buscar(r.getNumMatricula());
-			Alumno a = aa.buscar(m.getcodAlumno());
-			Curso c = ac.buscar(m.getcodCurso());
 			txtNumeroRetiro.setText("" + r.getNumRetiro());
-			txtNumeroMatricula.setText("" + r.getNumMatricula());
-			txtCodigoCurso.setText("" + m.getcodCurso());
-			txtAlumno.setText("" + a.getNombre()+" "+a.getApellidos());
-			txtAsignatura.setText(""+c.getAsignatura());
+			txtNumMatricula.setText("" + r.getNumMatricula());
 		}
 	}
-	//METODO LIMPIAR
 	void limpiar(){
-		txtNumeroMatricula.setText("");
-		txtCodigoCurso.setText("");
-		txtAlumno.setText("");
-		txtAsignatura.setText("");
+		txtNumeroRetiro.setText("" + ar.codigoCorrelativo());
+		txtNumMatricula.setText("");
+		txtCodCurso.setText("");
 	}
-
-	//METODO PARA OBTENER DATO DEL ALUMNO
 	String obtenerDatosAlumno() {
 		Matricula m = am.buscar(leerNumeroMatricula());
 	    Alumno a = aa.buscar(m.getcodAlumno());
 	    return "Nombres :  " + a.getNombre() + "\n" +
 		       "Apellidos :  " + a.getApellidos();
 	}
-	
 	String obtenerDatosCurso() {
 		Matricula m = am.buscar(leerNumeroMatricula());
 	    Curso c = ac.buscar(m.getcodAlumno());
 	    return "Asignatura :  " + c.getAsignatura();
 	}
-	
-	//METODO LEER NUMERO RETIRO
 	int leerNumeroRetiro(){
 		return Integer.parseInt(txtNumeroRetiro.getText().trim());
 	}
-	//MÉTODO LEER NUMERO DE MATRICULA
 	int leerNumeroMatricula(){
-		return Integer.parseInt(txtNumeroMatricula.getText().trim());
+		return Integer.parseInt(txtNumMatricula.getText().trim());
 	}
-	//MÉTODO LEER CODIGO CURSO
 	int leerCodigoCurso(){
-		return Integer.parseInt(txtCodigoCurso.getText().trim());
+		return Integer.parseInt(txtCodCurso.getText().trim());
 	}
-	//MÉTODOS QUE RETORNAN VALOR (CONFIRMAR)
-	int confirmar(String s) {
-		return JOptionPane.showConfirmDialog(this, s, "Alerta", 0, 1, null);
+	protected void COLOCAR_NUMERO_RETIRO(ActionEvent arg0) {
+		txtNumeroRetiro.setText("" + cboNumeroRetiro.getSelectedItem());
 	}
-	
-	int confirmar(String s1, String s2) {
-		return JOptionPane.showConfirmDialog(this, s1, s2, 0, 1, null);
+	protected void COLOCAR_CODIGO_CURSO(ActionEvent arg0) {
+		txtCodCurso.setText("" + cboCodCurso.getSelectedItem());
 	}
-		
-
+	public void obtenerNumeroRetiro() {
+		Retiro r;
+		cboNumeroRetiro.removeAllItems();
+		if (am.tamaño() == 0) {
+			cboNumeroRetiro.addItem("NO HAY");
+		}else {
+			for (int i = 0; i < ar.tamaño(); i++) {
+				r = ar.obtener(i);
+				cboNumeroRetiro.addItem("" + r.getNumMatricula());
+			}
+		}
+	}
+	public void obtenerCodigoCurso() {
+		Curso c;
+		for (int i = 0; i < ac.tamaño(); i++) {
+			c = ac.obtener(i);
+			cboCodCurso.addItem("" + c.getCodCurso());
+		}
+	}
+	public void obtenerNumMatricula() {
+		Matricula m;
+		for (int i = 0; i < am.tamaño(); i++) {
+			m = am.obtener(i);
+			cboNumMatricula.addItem("" + m.getnumMatricula());
+		}
+	}
+	public void keyPressed(KeyEvent e) {
+		if (e.getSource() == tblRetiro) {
+			keyPressedTblRetiro(e);
+		}
+	}
+	protected void keyPressedTblRetiro(KeyEvent e) {
+		e.consume();
+		editarFila();
+	}
 }

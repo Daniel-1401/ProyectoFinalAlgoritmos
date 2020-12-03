@@ -7,18 +7,13 @@ import Clases.Retiro;
 
 public class ArregloRetiro {
 	
-	//Atributo
 	private ArrayList <Retiro> retiro;
 
-	//Constructor
 	public ArregloRetiro() {
 		retiro = new ArrayList<Retiro>();
 		cargarRetiros();
 	}
 	
-
-	
-	//Operaciones públicas básicas
 	public void adicionar(Retiro x) {
 		retiro.add(x);
 		grabarRetiros();
@@ -48,13 +43,12 @@ public class ArregloRetiro {
 		grabarRetiros();
 	}
 	
-	//Metodo para guardar o escribir el txt
 	private void grabarRetiros() {
 		try {
 			PrintWriter pw;
 			String linea;
 			Retiro x;
-			pw = new PrintWriter(new FileWriter("retiros.txt"));
+			pw = new PrintWriter(new FileWriter("Retiros.txt"));
 			for (int i=0; i<tamaño(); i++) {
 				x = obtener(i);
 				linea =	x.getNumRetiro() + ";" +
@@ -69,14 +63,13 @@ public class ArregloRetiro {
 		}
 	}
 	
-	//Método para abrir o leer el txt
 	public void cargarRetiros() {
 		try {
 			BufferedReader br;
 			String linea, fecha, hora;
 			String[] s;
 			int numeroRetiro, numeroMatricula;
-			br = new BufferedReader(new FileReader("retiros.txt"));
+			br = new BufferedReader(new FileReader("Retiros.txt"));
 			while ((linea=br.readLine()) != null) {
 				s = linea.split(";");
 				numeroRetiro = Integer.parseInt(s[0].trim());
@@ -91,9 +84,6 @@ public class ArregloRetiro {
 		}
 	}
 	
-
-	
-	//Operaciones públicas complementarias
 	public int codigoCorrelativo() {
 		if (tamaño() == 0)
 			return 200001;

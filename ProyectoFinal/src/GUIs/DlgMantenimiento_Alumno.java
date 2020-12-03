@@ -381,12 +381,10 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 			FuncionesGenerales.error("No se encuentra algun alumno con ese codigo");
 			txtCodigoAlumno.requestFocus();
 		}
-		
-		
 	}
 	
 	private void MostrarBusqueda(int codigo) {
-		Alumno A =arregloAlumno.buscar(codigo);
+		Alumno A = arregloAlumno.buscar(codigo);
 		txtNombresAlumno.setText(A.getNombre());
 		txtApellidoAlumno.setText(A.getApellidos());
 		txtDniAlumno.setText(A.getDni());
@@ -428,7 +426,7 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 //											}catch (SQLException e) {
 //												JOptionPane.showMessageDialog(null, e.toString());
 //											}
-//											
+											
 											Alumno nuevo = new Alumno(codAlumno, nombre, apellidos, edad, dni, celular, estado);
 											arregloAlumno.adicionar(nuevo);
 											btnAdicionar.setEnabled(true);
