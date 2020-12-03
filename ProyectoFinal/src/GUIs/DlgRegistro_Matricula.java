@@ -451,7 +451,6 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 					a.setEstado(0);
 					aa.actualizarArchivo();
 					obtenerCodAlumno();
-
 				}
 				btnEliminar.setEnabled(true);
 			}
@@ -493,7 +492,6 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 			cboCodCurso.setEnabled(true);
 		}
 	}
-	
 	
 	protected void COLOCAR_COD_ALUMNO(ActionEvent arg0) {
 		txtCodAlumno.setText("" + cboCodAlumno.getSelectedItem());

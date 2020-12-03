@@ -6,10 +6,10 @@ import javax.swing.JOptionPane;
 public class FuncionesGenerales {
 	
 	public static void error(String Mnsj){
-        JOptionPane.showMessageDialog(null, Mnsj, "Error", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, Mnsj, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 	public static int  confirmar(String Mnsj){
-		int input = JOptionPane.showConfirmDialog(null,Mnsj, "Alerta",JOptionPane.YES_NO_OPTION);
+		int input = JOptionPane.showConfirmDialog(null,Mnsj, "ALERTA",JOptionPane.YES_NO_OPTION);
 		
 		return input;
     }
@@ -36,5 +36,8 @@ public class FuncionesGenerales {
 	}
 	public static void MostrarDatos(String Mnsj) {
 		int input = JOptionPane.showConfirmDialog(null,Mnsj, "DATOS:", JOptionPane.DEFAULT_OPTION);
+	}
+	public static void mensaje(String Mnsj) {
+		JOptionPane.showMessageDialog(null, Mnsj, "INFORMACION", 0);
 	}
 }

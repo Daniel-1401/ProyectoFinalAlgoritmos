@@ -80,6 +80,7 @@ public class ArregloCurso {
 				}
 			});
 		}catch (Exception e) {
+			
 		}
 	}
 	private void grabarCurso() {
