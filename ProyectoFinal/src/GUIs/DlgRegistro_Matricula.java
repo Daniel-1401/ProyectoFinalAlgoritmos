@@ -422,7 +422,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	}
 	
 	protected void CONSULTAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnEliminar, btnModificar);
 		btnConsultar.setEnabled(false);
 		btnAceptar.setEnabled(false);
 		txtNumMatricula.setVisible(false);
@@ -431,7 +431,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		HabilitarEntradas(false);
 	}
 	protected void ELIMINAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnModificar);
 		btnEliminar.setEnabled(false);
 		btnBuscar.setEnabled(false);
 		if (am.tamaño() == 0) {
@@ -468,7 +468,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		
 	}
 	protected void ADICIONAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnConsultar, btnEliminar, btnModificar);
 		btnAdicionar.setEnabled(false);
 		btnBuscar.setEnabled(false);
 		cboCodAlumno.setEnabled(true);
@@ -479,7 +479,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		HabilitarEntradas(true);
 	}
 	protected void MODIFICAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnConsultar, btnEliminar, btnModificar);
 		btnModificar.setEnabled(false);
 		btnBuscar.setEnabled(false);
 		if (ac.tamaño() == 0) {
@@ -589,7 +589,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	protected void mouseClickedTblMatricula(MouseEvent e) {
 		txtNumMatricula.setEditable(false);
 		HabilitarEntradas(false);
-		FuncionesGenerales.HabilitarBotones(true, btnAdicionar, btnConsultar, btnEliminar, btnModificar, btnAdicionar, btnConsultar);
+		FuncionesGenerales.HabilitarBotones(true, btnAdicionar, btnConsultar, btnEliminar, btnModificar, btnConsultar);
 		cboNumMatricula.setVisible(false);
 		txtNumMatricula.setVisible(true);
 		editarFila();

@@ -25,14 +25,13 @@ public class FuncionesGenerales {
 	}
 	public static void HabilitarBotones(boolean X,
 			JButton A, JButton B, JButton C 
-			, JButton D, JButton E
-			, JButton F) {
+			, JButton D, JButton E) {
 		A.setEnabled(X);
 		B.setEnabled(X);
 		C.setEnabled(X);
 		D.setEnabled(X);
 		E.setEnabled(X);
-		F.setEnabled(X);
+
 	}
 	public static void MostrarDatos(String Mnsj) {
 		int input = JOptionPane.showConfirmDialog(null,Mnsj, "DATOS:", JOptionPane.DEFAULT_OPTION);

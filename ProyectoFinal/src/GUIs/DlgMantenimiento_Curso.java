@@ -356,7 +356,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	}
 
 	protected void CONSULTAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnConsultar, btnEliminar, btnModificar, btnBuscar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnEliminar, btnModificar, btnBuscar);
 		btnConsultar.setEnabled(false);
 		btnAceptar.setEnabled(false);
 		limpieza();
@@ -365,7 +365,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	}
 
 	protected void BUSCAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnConsultar, btnEliminar, btnModificar, btnBuscar);
+		FuncionesGenerales.HabilitarBotones(true, btnAdicionar, btnConsultar, btnEliminar, btnModificar, btnBuscar);
 		try {
 			int codigoCurso = leerCodigoCurso();
 			MostrarBusqueda(codigoCurso);
@@ -377,7 +377,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	}
 	
 	protected void ADICIONAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnConsultar, btnEliminar, btnModificar);
 		btnAdicionar.setEnabled(false);
 		btnBuscar.setEnabled(false);
 		txtCodigo.setEditable(true);
@@ -387,7 +387,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	}
 	
 	protected void MODIFICAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
 		btnBuscar.setEnabled(false);
 		btnModificar.setEnabled(false);
 		if (arregloCurso.tamaño() == 0) {
@@ -460,7 +460,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	}
 	
 	protected void ELIMINAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnEliminar, btnCerrar, btnConsultar, btnModificar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnCerrar, btnConsultar, btnModificar);
 		btnEliminar.setEnabled(false);
 		btnBuscar.setEnabled(false);
 		if (arregloCurso.tamaño() == 0) {
@@ -619,7 +619,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	}
 	protected void mouseClickedTblCurso(MouseEvent arg0) {
 		HabilitarEntrada(false);
-		FuncionesGenerales.HabilitarBotones(true, btnAdicionar, btnConsultar, btnEliminar, btnModificar, btnAdicionar, btnConsultar);
+		FuncionesGenerales.HabilitarBotones(true, btnAdicionar, btnConsultar, btnEliminar, btnModificar, btnConsultar);
 		txtCodigo.setEditable(false);
 		editarFila();
 	}
