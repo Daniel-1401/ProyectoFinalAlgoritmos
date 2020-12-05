@@ -1,45 +1,37 @@
 package GUIs;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.SystemColor;
-import java.awt.event.MouseMotionListener;
+import java.awt.FlowLayout;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingConstants;
+import javax.swing.JScrollPane;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.ImageIcon;
 
-import Arreglos.ArregloAlumno;
-import Arreglos.ArregloCurso;
-import Arreglos.ArregloMatricula;
-import Arreglos.ArregloRetiro;
-
-import Clases.Alumno;
-import Clases.Curso;
-import Clases.Matricula;
-import Clases.Retiro;
+import Arreglos.*;
+import Clases.*;
 import FuncionGenerales.FuncionesGenerales;
 import Libreria.Fecha;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseMotionListener;
 
 public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
@@ -53,13 +45,14 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	private JButton btnConsultar;
 	private JButton btnEliminar;
 	private JButton btnBuscar;
-	private JTable tblRetiro;
-	private JScrollPane scrollPane;
-	private DefaultTableModel modelo;
 	private JButton btnCerrar;
 	private JComboBox<String> cboNumeroRetiro;
 	private JComboBox<String> cboCodCurso;
 	private JComboBox<String> cboNumMatricula;
+	private JTable tblRetiro;
+	private JScrollPane scrollPane;
+	private DefaultTableModel modelo;
+	private JLabel MoverVentana;
 	int xx, xy;
 
 	/**
@@ -74,12 +67,7 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 			e.printStackTrace();
 		}
 	}
-	
-	ArregloRetiro ar = new ArregloRetiro(); 
-	ArregloMatricula am = new ArregloMatricula();
-	ArregloAlumno aa = new ArregloAlumno();
-	ArregloCurso ac = new ArregloCurso();
-	private JLabel lblNewLabel;
+
 	
 
 	/**
@@ -88,7 +76,6 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	public DlgRegistro_Retiro() {
 		setUndecorated(true);
 		setResizable(false);
-		setTitle("REGISTRO | RETIRO");
 		setBounds(100,100,700,500);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -115,6 +102,12 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		lblCodigoCurso.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblCodigoCurso.setBounds(10, 103, 110, 20);
 		contentPanel.add(lblCodigoCurso);
+		
+		MoverVentana = new JLabel("");
+		MoverVentana.addMouseMotionListener(this);
+		MoverVentana.addMouseListener(this);
+		MoverVentana.setBounds(0, 0, 652, 34);
+		contentPanel.add(MoverVentana);	
 		
 		btnConsultar = new JButton("CONSULTAR");
 		btnConsultar.addActionListener(this);
@@ -154,7 +147,7 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		
 		btnModificar = new JButton("MODIFICAR");
 		btnModificar.addActionListener(this);
-		btnModificar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
+		btnModificar.setPressedIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
 		btnModificar.setRolloverIcon(new ImageIcon("imagenes\\BOTON_AME_2.png"));
 		btnModificar.setIcon(new ImageIcon("imagenes\\BOTON_AME_1.png"));
 		btnModificar.setVerticalTextPosition(SwingConstants.CENTER);
@@ -187,11 +180,6 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		btnEliminar.setBackground(Color.LIGHT_GRAY);
 		btnEliminar.setBounds(557, 180, 110, 40);
 		contentPanel.add(btnEliminar);
-		
-		txtNumeroRetiro = new JTextField();
-		txtNumeroRetiro.setBounds(141, 35, 86, 20);
-		contentPanel.add(txtNumeroRetiro);
-		txtNumeroRetiro.setColumns(10);
 		
 		btnBuscar = new JButton("BUSCAR");
 		btnBuscar.addActionListener(this);
@@ -249,7 +237,6 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		tblRetiro = new JTable();
 		tblRetiro.addMouseListener(this);
 		tblRetiro.addKeyListener(this);
-		
 		tblRetiro.setFillsViewportHeight(true);
 		scrollPane.setViewportView(tblRetiro);
 		
@@ -267,14 +254,22 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		obtenerNumerosRetiro();
 		
 		cboCodCurso = new JComboBox<String>();
+		cboCodCurso.addActionListener(this);
 		cboCodCurso.setBounds(141, 98, 111, 20);
 		contentPanel.add(cboCodCurso);
 		obtenerCodigosCurso();
 		
 		cboNumMatricula = new JComboBox<String>();
+		cboNumMatricula.addActionListener(this);
 		cboNumMatricula.setBounds(141, 68, 112, 20);
 		contentPanel.add(cboNumMatricula);
 		obtenerNumMatricula();
+		
+		txtNumeroRetiro = new JTextField();
+		txtNumeroRetiro.setEditable(false);
+		txtNumeroRetiro.setColumns(10);
+		txtNumeroRetiro.setBounds(141, 35, 86, 20);
+		contentPanel.add(txtNumeroRetiro);
 		
 		txtNumMatricula = new JTextField();
 		txtNumMatricula.setEditable(false);
@@ -288,123 +283,176 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		txtCodCurso.setBounds(141, 100, 86, 20);
 		contentPanel.add(txtCodCurso);
 		
-		cboNumeroRetiro.setVisible(false);
-		cboCodCurso.setVisible(false);
-		cboNumMatricula.setVisible(false);
 		APAGAR_ENTRADAS();
 		txtNumeroRetiro.setVisible(true);
 		txtNumMatricula.setVisible(true);
 		txtCodCurso.setVisible(true);
-		listar();
+		Listar();
 		editarFila();
-		txtNumeroRetiro.setEditable(false);
-		
-		lblNewLabel = new JLabel("");
-		lblNewLabel.addMouseMotionListener(this);
-		lblNewLabel.addMouseListener(this);
-		lblNewLabel.setBounds(0, 0, 652, 34);
-		contentPanel.add(lblNewLabel);
-		
-		
 		
 	}
 	
-	public void actionPerformed(ActionEvent arg0) {
-		if (arg0.getSource() == cboNumeroRetiro) {
-			COLOCAR_NUMERO_RETIRO(arg0);
+	ArregloRetiro ar = new ArregloRetiro(); 
+	ArregloMatricula am = new ArregloMatricula();
+	ArregloAlumno aa = new ArregloAlumno();
+	ArregloCurso ac = new ArregloCurso();
+	
+	private void obtenerNumerosRetiro() {
+		Retiro r;
+		cboNumeroRetiro.removeAllItems();
+		if (ar.tamaño() == 0) {
+			cboNumeroRetiro.addItem("NO HAY");
+		}else {
+			cboNumeroRetiro.addItem("SELECCIONAR");
+			for (int i = 0; i < ar.tamaño(); i++) {
+				r = ar.obtener(i);
+				cboNumeroRetiro.addItem("" + r.getNumRetiro());
+			}
 		}
+	}
+	private void obtenerNumMatricula() {
+		Matricula m;
+		cboNumMatricula.removeAllItems();
+		if (am.tamaño() == 0) {
+			cboNumMatricula.addItem("NO HAY");
+		}else {
+			cboNumMatricula.addItem("SELECCIONAR");
+			for (int i = 0; i < am.tamaño(); i++) {
+				m = am.obtener(i);
+				if (aa.buscar(m.getcodAlumno()).getEstado() == 1) {
+				cboNumMatricula.addItem("" + m.getnumMatricula());
+				}
+			}
+		}
+	}
+	private void obtenerCodigosCurso() {
+		Curso c;
+		cboCodCurso.removeAllItems();
+		if (ac.tamaño() == 0) {
+			cboCodCurso.addItem("NO HAY");
+		}else {
+			cboCodCurso.addItem("SELECCIONAR");
+			for (int i = 0; i < ac.tamaño(); i++) {
+				c = ac.obtener(i);
+				cboCodCurso.addItem("" + c.getCodCurso());
+			}
+		}
+	}
+
+	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == btnCerrar) {
 			CERRAR(arg0);
-		}
-		if (arg0.getSource() == btnBuscar) {
-			BUSCAR(arg0);
-		}
-		if (arg0.getSource() == btnEliminar) {
-			ELIMINAR(arg0);
-		}
-		if (arg0.getSource() == btnConsultar) {
-			CONSULTAR(arg0);
-		}
-		if (arg0.getSource() == btnModificar) {
-			MODIFICAR(arg0);
-		}
-		if (arg0.getSource() == btnAdicionar) {
-			ADICIONAR(arg0);
 		}
 		if (arg0.getSource() == btnAceptar) {
 			ACEPTAR(arg0);
 		}
-	}
-
-	protected void ACEPTAR(ActionEvent arg0) {
-		try {
-			int numRetiro = leerNumeroRetiro();
-			try {
-				int numMatricula = leerNumeroMatricula();
-				if (btnAdicionar.isEnabled() == false) {
-					String fecha = Fecha.fechaActual();
-					String hora = Fecha.horaActual();
-					Retiro nuevo = new Retiro(numRetiro, numMatricula, fecha, hora);
-					ar.adicionar(nuevo);
-					int codAlumno = am.buscar(numMatricula).getcodAlumno();
-					Alumno a = aa.buscar(codAlumno);
-					a.setEstado(2);
-					aa.actualizarArchivo();
-					obtenerNumMatricula();
-					btnAdicionar.setEnabled(true);
-				}
-				if (btnModificar.isEnabled() == false) {
-					if (ac.tamaño() > 0) {
-						try {
-							int codCurso = leerCodigoCurso();
-							Matricula m = am.buscar(numMatricula);
-							m.setcodCurso(codCurso);
-							am.actualizarArchivo();
-							btnModificar.setEnabled(true);
-						}catch (Exception e) {
-							FuncionesGenerales.error("DEBE ELEGIR UN CURSO");
-						}
-					}else {
-						FuncionesGenerales.error("NO EXISTEN CURSOS");
-					}
-				}
-			}catch (Exception e) {
-				FuncionesGenerales.error("NO HAY MATRICULAS");
-			}
-		}catch (Exception e) {
-			FuncionesGenerales.error("NO HAY RETIROS");
+		if (arg0.getSource() == btnBuscar) {
+			BUSCAR(arg0);
 		}
-		
+		if (arg0.getSource() == btnConsultar) {
+			CONSULTAR(arg0);
+		}
+		if (arg0.getSource() == btnAdicionar) {
+			ADICIONAR(arg0);
+		}
+		if (arg0.getSource() == btnModificar) {
+			MODIFICAR(arg0);
+		}
+		if (arg0.getSource() == btnEliminar) {
+			ELIMINAR(arg0);
+		}
+		if (arg0.getSource() == cboNumeroRetiro) {
+			COLOCAR_NUMERO_RETIRO(arg0);
+		}
+		if (arg0.getSource() == cboNumMatricula) {
+			COLOCAR_NUMERO_MATRICULA(arg0);
+		}
+		if (arg0.getSource() == cboCodCurso) {
+			COLOCAR_CODIGO_CURSO(arg0);
+		}
 	}
-
-	protected void ADICIONAR(ActionEvent arg0) {
-		HABILITAR_BOTONES(btnAdicionar, btnAceptar);
-		btnBuscar.setEnabled(false);
-		APAGAR_ENTRADAS();
-		cboNumMatricula.setVisible(true);
-		txtNumeroRetiro.setVisible(true);
-		obtenerCodigosCurso();
-		editarFila();
-	}
-
+	
 	protected void CERRAR(ActionEvent arg0) {
 		this.dispose();
 	}
-
+	protected void ACEPTAR(ActionEvent arg0) {
+		int numRetiro = leerNumeroRetiro();
+		try {
+			int numMatricula = leerNumeroMatricula();
+			if (btnAdicionar.isEnabled()== false) {
+				String fecha = Fecha.fechaActual();
+				String hora = Fecha.horaActual();
+				Retiro nuevo = new Retiro(numRetiro, numMatricula, fecha, hora);
+				ar.adicionar(nuevo);
+				btnAdicionar.setEnabled(true);
+				int codAlumno = am.buscar(numMatricula).getcodAlumno();
+				Alumno a = aa.buscar(codAlumno);
+				a.setEstado(2);
+				aa.actualizarArchivo();
+			}
+			if (btnModificar.isEnabled()==false) {
+				
+			}
+			Listar();
+		}catch (Exception e) {
+			FuncionesGenerales.error("DEBE SELECCIONAR UNA MATRICULA");
+		}
+	}
+	protected void BUSCAR(ActionEvent arg0) {
+	}
+	protected void CONSULTAR(ActionEvent arg0) {
+		HABILITAR_BOTONES(btnConsultar, btnBuscar);
+		APAGAR_ENTRADAS();
+		obtenerNumerosRetiro();
+		btnAceptar.setEnabled(false);
+		cboNumeroRetiro.setVisible(true);
+		cboNumeroRetiro.setEnabled(true);
+		if (cboNumeroRetiro.getItemCount() > 1) {
+			cboNumeroRetiro.setSelectedIndex(-1);
+		}
+	}
+	protected void ADICIONAR(ActionEvent arg0) {
+		HABILITAR_BOTONES(btnAdicionar, btnAceptar);
+		APAGAR_ENTRADAS();
+		obtenerNumMatricula();
+		btnBuscar.setEnabled(false);
+		txtNumeroRetiro.setVisible(true);
+		cboNumMatricula.setVisible(true);
+		cboNumMatricula.setEnabled(true);
+		if (cboNumMatricula.getItemCount() > 1) {
+			cboNumMatricula.setSelectedIndex(0);
+		}
+		if (cboNumMatricula.getSelectedItem() == "NO HAY") {
+			btnAceptar.setEnabled(false);
+			cboNumMatricula.setEnabled(false);
+		}
+		limpieza();
+	}
 	protected void MODIFICAR(ActionEvent arg0) {
 		HABILITAR_BOTONES(btnModificar, btnAceptar);
-		btnBuscar.setEnabled(false);
 		APAGAR_ENTRADAS();
-		txtNumeroRetiro.setVisible(true);
-		txtNumMatricula.setVisible(true);
+		btnBuscar.setEnabled(false);
 		cboCodCurso.setVisible(true);
-	}	
-
-	//BOTONES_HABILITAR:
-	//	Button N1 SE DESHABILITA; Button N2 SE ACTIVA(PARA "btnAceptar" o "btnBuscar"
-	void HABILITAR_BOTONES(JButton N1, JButton N2) {
-		FuncionesGenerales.HabilitarBotones(true, btnConsultar, btnAdicionar, btnModificar, btnEliminar, N2);
-		N1.setEnabled(false);
+		cboCodCurso.setEnabled(true);
+		txtNumeroRetiro.setVisible(true);
+		txtNumeroRetiro.setEnabled(true);
+		txtNumMatricula.setVisible(true);
+		txtNumMatricula.setEditable(false);
+		if (cboCodCurso.getItemCount() > 1) {
+			cboCodCurso.setSelectedIndex(0);
+			
+		}
+		if (cboCodCurso.getSelectedItem() == "NO HAY") {
+			btnAceptar.setEnabled(false);
+			cboCodCurso.setEnabled(false);
+		}
+	}
+	protected void ELIMINAR(ActionEvent arg0) {
+	}
+	
+	void HABILITAR_BOTONES(JButton btnDESHABILITAR, JButton btnACTIVAR) {
+		FuncionesGenerales.HabilitarBotones(true, btnConsultar, btnAdicionar, btnModificar, btnEliminar, btnACTIVAR);
+		btnDESHABILITAR.setEnabled(false);
 	}
 	void APAGAR_ENTRADAS() {
 		cboNumeroRetiro.setVisible(false);
@@ -415,37 +463,7 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		txtCodCurso.setVisible(false);
 	}
 	
-	protected void CONSULTAR(ActionEvent arg0) {
-		HABILITAR_BOTONES(btnConsultar, btnBuscar);
-		btnAceptar.setEnabled(false);
-		APAGAR_ENTRADAS();
-		cboNumeroRetiro.setVisible(true);
-		cboNumeroRetiro.setEnabled(true);
-		obtenerNumerosRetiro();
-	}
-
-	protected void ELIMINAR(ActionEvent arg0) {
-		HABILITAR_BOTONES(btnEliminar, btnConsultar);
-		if (ar.tamaño() == 0) {
-			FuncionesGenerales.error("NO EXISTEN RETIROS PARA CANCELAR");
-			btnEliminar.setEnabled(true);
-		}
-		else {
-			editarFila();
-			if (SE_PUEDE_ELIMINAR()) {
-				int confirmacion = FuncionesGenerales.confirmar("DESEA CANCELAR UN RETIRO?");
-				if (confirmacion == 0) {
-					ar.eliminar(ar.buscar(leerNumeroRetiro()));
-					listar();
-					editarFila();
-				}
-				btnEliminar.setEnabled(true);
-			}else {
-				FuncionesGenerales.error("NO SE PUEDO CANCELAR ESTE RETIRO");
-			}
-		}
-	}
-	private boolean SE_PUEDE_ELIMINAR() {
+	boolean SE_PUEDE_ELIMINAR() {
 		Retiro r = ar.obtener(leerNumeroRetiro());
 		int NumMatricula = r.getNumMatricula();
 		Matricula m = am.buscar(NumMatricula);
@@ -460,123 +478,93 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		}
 		
 	}
-	protected void BUSCAR(ActionEvent arg0) {
-		
-	}
 	
-	public void keyReleased(KeyEvent e) {
-		e.consume();
-		editarFila();
-	}
-	public void keyTyped(KeyEvent e) {
-	}
-	public void mouseEntered(MouseEvent e) {
-		tblRetiro.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	}
-	public void mouseExited(MouseEvent e) {
-	}
-	public void mouseReleased(MouseEvent e) {
-	}
-	public void mouseClicked(MouseEvent e) {
-		APAGAR_ENTRADAS();
-		txtNumeroRetiro.setVisible(true);
-		txtNumMatricula.setVisible(true);
-		txtCodCurso.setVisible(true);
-		HABILITAR_BOTONES(btnAceptar, btnAceptar);
-		editarFila();
-	}
-	
-	void listar(){
+	void Listar(){
 		int posFila = 0;
-		if (modelo.getRowCount() > 0)
+		if (modelo.getRowCount() > 0) {
 			posFila = tblRetiro.getSelectedRow();
-		if (modelo.getRowCount() == ar.tamaño() - 1)
-			posFila = ar.tamaño() - 1;
-		if (posFila == ar.tamaño())
-			posFila --;
-		modelo.setRowCount(0);
-		Retiro r;
-		for (int j=0; j<ar.tamaño(); j++) {
-			r = ar.obtener(j);
-			Object[] fila = { r.getNumRetiro(),
-					          r.getNumMatricula(),
-					          r.getFecha(),
-					          r.getHora()};
-								
-			modelo.addRow(fila);
-			editarFila();
 		}
-		if (ar.tamaño() > 0)
+		if (modelo.getRowCount() == ar.tamaño() - 1) {
+			posFila = ar.tamaño() - 1;
+		}
+		if (posFila == ar.tamaño()) {
+			posFila --;			
+		}
+		
+		modelo.setRowCount(0);
+		Retiro R;
+		for (int i=0; i<ar.tamaño(); i++) {
+			R = ar.obtener(i);
+			Object[] fila = {
+					R.getNumRetiro(),
+					R.getNumMatricula(),
+					R.getFecha(),
+					R.getHora()};
+			modelo.addRow(fila);
+		}
+		if (ar.tamaño() > 0) {
 			tblRetiro.getSelectionModel().setSelectionInterval(posFila, posFila);
+		}
 	}
 	void editarFila(){
 		if (ar.tamaño() == 0)
-			limpiar();
+			limpieza();
 		else {
 			Retiro r = ar.obtener(tblRetiro.getSelectedRow());
 			txtNumeroRetiro.setText("" + r.getNumRetiro());
 			txtNumMatricula.setText("" + r.getNumMatricula());
 		}
 	}
-	void limpiar(){
+	void limpieza(){
 		txtNumeroRetiro.setText("" + ar.codigoCorrelativo());
 		txtNumMatricula.setText("");
 		txtCodCurso.setText("");
 	}
-//	String obtenerDatosAlumno() {
-//		Matricula m = am.buscar(leerNumeroMatricula());
-//	    Alumno a = aa.buscar(m.getcodAlumno());
-//	    return "Nombres :  " + a.getNombre() + "\n" +
-//		       "Apellidos :  " + a.getApellidos();
-//	}
-//	String obtenerDatosCurso() {
-//		Matricula m = am.buscar(leerNumeroMatricula());
-//	    Curso c = ac.buscar(m.getcodAlumno());
-//	    return "Asignatura :  " + c.getAsignatura();
-//	}
+
 	int leerNumeroRetiro(){
-		return Integer.parseInt(txtNumeroRetiro.getText().trim());
+		return Integer.parseInt(txtNumeroRetiro.getText());
 	}
 	int leerNumeroMatricula(){
-		return Integer.parseInt(txtNumMatricula.getText().trim());
+		return Integer.parseInt(txtNumMatricula.getText());
 	}
 	int leerCodigoCurso(){
-		return Integer.parseInt(txtCodCurso.getText().trim());
+		return Integer.parseInt(txtCodCurso.getText());
 	}
+	
 	protected void COLOCAR_NUMERO_RETIRO(ActionEvent arg0) {
-		txtNumeroRetiro.setText("" + cboNumeroRetiro.getSelectedItem());
+		try {
+			txtNumeroRetiro.setText("" + cboNumeroRetiro.getSelectedItem());
+		}catch (Exception e) {
+		}
+	}
+	protected void COLOCAR_NUMERO_MATRICULA(ActionEvent arg0) {
+		try {
+			txtNumMatricula.setText("" + cboNumMatricula.getSelectedItem());			
+		}catch (Exception e) {
+		}
 	}
 	protected void COLOCAR_CODIGO_CURSO(ActionEvent arg0) {
-		txtCodCurso.setText("" + cboCodCurso.getSelectedItem());
-	}
-	public void obtenerNumerosRetiro() {
-		Retiro r;
-		cboNumeroRetiro.removeAllItems();
-		if (ar.tamaño() == 0) {
-			cboNumeroRetiro.addItem("NO HAY");
-		}else {
-			for (int i = 0; i < ar.tamaño(); i++) {
-				r = ar.obtener(i);
-				cboNumeroRetiro.addItem("" + r.getNumRetiro());
-			}
+		try {
+			txtCodCurso.setText("" + cboCodCurso.getSelectedItem());
+		}catch (Exception e) {
 		}
 	}
-	public void obtenerCodigosCurso() {
-		Curso c;
-		cboCodCurso.removeAllItems();
-		for (int i = 0; i < ac.tamaño(); i++) {
-			c = ac.obtener(i);
-			cboCodCurso.addItem("" + c.getCodCurso());
-		}
+	
+	public void keyReleased(KeyEvent e) {
 	}
-	public void obtenerNumMatricula() {
-		Matricula m;
-		cboNumMatricula.removeAllItems();
-		for (int i = 0; i < am.tamaño(); i++) {
-			m = am.obtener(i);
-			cboNumMatricula.addItem("" + m.getnumMatricula());
-		}
+	public void keyTyped(KeyEvent e) {
 	}
+	public void mouseEntered(MouseEvent e) {
+	}
+	public void mouseExited(MouseEvent e) {
+	}
+	public void mouseReleased(MouseEvent e) {
+	}
+	public void mouseClicked(MouseEvent e) {
+	}
+	public void mouseMoved(MouseEvent e) {
+	}
+	
 	public void keyPressed(KeyEvent e) {
 		if (e.getSource() == tblRetiro) {
 			keyPressedTblRetiro(e);
@@ -586,23 +574,21 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	}
 
 	public void mousePressed(MouseEvent e) {
-		if (e.getSource() == lblNewLabel) {
-			mousePressedLblNewLabel(e);
+		if (e.getSource() == MoverVentana) {
+			MOVER_VENTANA(e);
+		}
+	}
+	public void mouseDragged(MouseEvent e) {
+		if (e.getSource() == MoverVentana) {
+			MOVER(e);
 		}
 	}
 
-	protected void mousePressedLblNewLabel(MouseEvent e) {
+	protected void MOVER_VENTANA(MouseEvent e) {
 		xx = e.getX();
 		xy = e.getY();
 	}
-	public void mouseDragged(MouseEvent e) {
-		if (e.getSource() == lblNewLabel) {
-			mouseDraggedLblNewLabel(e);
-		}
-	}
-	public void mouseMoved(MouseEvent e) {
-	}
-	protected void mouseDraggedLblNewLabel(MouseEvent e) {
+	protected void MOVER(MouseEvent e) {
 		int x = e.getXOnScreen();
 		int y = e.getYOnScreen();
 		

@@ -1,3 +1,5 @@
-1234;MATEMATICAS;5;12;48
-1524;Qwer;0;23;53
-2366;Rg;0;56;5675
+1029;Programacion;2;21;30
+1234;Base De Datos;4;25;29
+5432;Ingles;2;15;25
+6452;Matematica;2;25;55
+9877;Fisica;2;30;60

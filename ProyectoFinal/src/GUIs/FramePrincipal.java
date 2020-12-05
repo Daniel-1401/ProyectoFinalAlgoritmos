@@ -71,26 +71,26 @@ public class FramePrincipal extends JFrame implements ActionListener {
 				}
 			}
 		});
-		try {
-			Statement sql = Conexion.getConexion().createStatement();
-		}catch (SQLException e) {
-			System.out.println(e.toString());
-		}
+//		try {
+//			Statement sql = Conexion.getConexion().createStatement();
+//		}catch (SQLException e) {
+//			System.out.println(e.toString());
+//		}
 	}
 	
-	 public static Date ParseFecha(String fecha)
-	    {
-	        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-	        Date fechaDate = null;
-	        try {
-	            fechaDate = formato.parse(fecha);
-	        } 
-	        catch (ParseException ex) 
-	        {
-	            System.out.println(ex);
-	        }
-	        return fechaDate;
-	    }
+//	 public static Date ParseFecha(String fecha)
+//	    {
+//	        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+//	        Date fechaDate = null;
+//	        try {
+//	            fechaDate = formato.parse(fecha);
+//	        } 
+//	        catch (ParseException ex) 
+//	        {
+//	            System.out.println(ex);
+//	        }
+//	        return fechaDate;
+//	    }
 
 	/**
 	 * Create the frame.

@@ -15,7 +15,6 @@ public class ArregloAlumno {
 		alumno = new ArrayList <Alumno> ();
 		cargarAlumnos();
 	}
-	
 	public void adicionar (Alumno x) {
 		alumno.add(x);
 		grabarAlumnos();
@@ -46,7 +45,6 @@ public class ArregloAlumno {
 		try {
 			Collections.sort(alumno, new Comparator<Alumno>() {
 
-				@Override
 				public int compare(Alumno arg0, Alumno arg1) {
 					return arg0.getCodAlumno().compareTo(arg1.getCodAlumno());
 				}

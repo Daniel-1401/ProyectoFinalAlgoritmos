@@ -1,7 +1,6 @@
 package GUIs;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -27,7 +26,6 @@ import Libreria.Fecha;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Desktop.Action;
 import java.awt.Font;
 
 import java.awt.event.ActionListener;
@@ -82,7 +80,6 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		setResizable(false);
 		setBounds(100,100,700,500);
 		getContentPane().setLayout(new BorderLayout());
-	
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -219,13 +216,6 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		lblNummatricula.setBounds(10, 40, 86, 17);
 		contentPanel.add(lblNummatricula);
 		
-		txtNumMatricula = new JTextField();
-		txtNumMatricula.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtNumMatricula.setEditable(false);
-		txtNumMatricula.setColumns(10);
-		txtNumMatricula.setBounds(106, 40, 102, 20);
-		contentPanel.add(txtNumMatricula);
-		
 		lblCodigoAlumno = new JLabel("Codigo Alumno");
 		lblCodigoAlumno.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblCodigoAlumno.setBounds(10, 76, 97, 17);
@@ -245,6 +235,13 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		txtCodCurso.setColumns(10);
 		txtCodCurso.setBounds(10, 203, 96, 19);
 		contentPanel.add(txtCodCurso);
+
+		txtNumMatricula = new JTextField();
+		txtNumMatricula.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtNumMatricula.setEditable(false);
+		txtNumMatricula.setColumns(10);
+		txtNumMatricula.setBounds(106, 40, 102, 20);
+		contentPanel.add(txtNumMatricula);
 		
 		cboCodCurso = new JComboBox <String>();
 		cboCodCurso.addActionListener(this);
@@ -298,26 +295,6 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	ArregloAlumno aa = new ArregloAlumno();
 	ArregloCurso ac = new ArregloCurso();
 
-	private void obtenerCodCursos(){
-		Curso c;
-		cboCodCurso.removeAllItems();
-		for (int i = 0; i < ac.tamaño(); i++) {
-			c = ac.obtener(i);
-			cboCodCurso.addItem("" + c.getCodCurso());
-		}
-	}
-	
-	private void obtenerCodAlumno() {
-		Alumno a;
-		cboCodAlumno.removeAllItems();
-		for (int i = 0; i < aa.tamaño(); i++) {
-			a = aa.obtener(i);
-			if (a.getEstado() == 0) {
-				cboCodAlumno.addItem("" + a.getCodAlumno());
-			}
-		}
-	}
-	
 	private void obtenerNumMatricula() {
 		Matricula m;
 		cboNumMatricula.removeAllItems();
@@ -329,8 +306,27 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 				cboNumMatricula.addItem("" + m.getnumMatricula());
 			}	
 		}
-		
 	}
+	private void obtenerCodAlumno() {
+		Alumno a;
+		cboCodAlumno.removeAllItems();
+		for (int i = 0; i < aa.tamaño(); i++) {
+			a = aa.obtener(i);
+			if (a.getEstado() == 0) {
+				cboCodAlumno.addItem("" + a.getCodAlumno());
+			}
+		}
+	}
+	private void obtenerCodCursos(){
+		Curso c;
+		cboCodCurso.removeAllItems();
+		for (int i = 0; i < ac.tamaño(); i++) {
+			c = ac.obtener(i);
+			cboCodCurso.addItem("" + c.getCodCurso());
+		}
+	}
+	
+	
 	
 	public void actionPerformed(ActionEvent arg0) {
 
@@ -429,6 +425,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		cboNumMatricula.setVisible(true);
 		cboNumMatricula.setEnabled(true);
 		HabilitarEntradas(false);
+		obtenerNumMatricula();
 	}
 	protected void ELIMINAR(ActionEvent arg0) {
 		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnAdicionar, btnConsultar, btnModificar);
@@ -479,7 +476,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		HabilitarEntradas(true);
 	}
 	protected void MODIFICAR(ActionEvent arg0) {
-		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnBuscar, btnConsultar, btnEliminar, btnModificar);
+		FuncionesGenerales.HabilitarBotones(true, btnAceptar, btnAdicionar, btnConsultar, btnEliminar, btnModificar);
 		btnModificar.setEnabled(false);
 		btnBuscar.setEnabled(false);
 		if (ac.tamaño() == 0) {
