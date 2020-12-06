@@ -12,6 +12,8 @@ public class ArregloMatricula {
 		cargarMatriculas();
 	}
 	
+	//Operaciones públicas básicas
+	
 	public int tamaño() {
 		return matricula.size();
 	}
@@ -42,6 +44,8 @@ public class ArregloMatricula {
 		grabarMatriculas();
 	}
 	
+	//Se cargan los datos en el archivo .tx	t
+	
 	public void cargarMatriculas() {
 		try {
 			BufferedReader br;
@@ -66,6 +70,8 @@ public class ArregloMatricula {
 		}
 	}
 	
+	//Se guardan los datos y no borran aún así se cierre
+	
 	public void grabarMatriculas() {
 		try {
 			PrintWriter pw;
@@ -88,6 +94,7 @@ public class ArregloMatricula {
 		catch (Exception e) {
 		}
 	}
+	
 	
 	public int codigoCorrelativo() {
 		if (tamaño() == 0) {
