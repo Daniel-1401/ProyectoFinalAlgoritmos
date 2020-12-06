@@ -570,10 +570,10 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 		return true;
 	}
 	
-	private boolean NoHayDNIRepetidos(String S) {
+	private boolean NoHayDNIRepetidos(String nroDNI) {
 		if (btnAdicionar.isEnabled() == false) {
 			for (int i = 0; i < arregloAlumno.tamaño(); i++) {
-				if (S.equals(arregloAlumno.obtener(i).getDni())) {
+				if (nroDNI.equals(arregloAlumno.obtener(i).getDni())) {
 					return false;
 				}
 			}

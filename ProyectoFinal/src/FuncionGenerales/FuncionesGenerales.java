@@ -37,6 +37,6 @@ public class FuncionesGenerales {
 		int input = JOptionPane.showConfirmDialog(null,Mnsj, "DATOS:", JOptionPane.DEFAULT_OPTION);
 	}
 	public static void mensaje(String Mnsj) {
-		JOptionPane.showMessageDialog(null, Mnsj, "INFORMACION", 0);
+		JOptionPane.showMessageDialog(null, Mnsj);
 	}
 }
