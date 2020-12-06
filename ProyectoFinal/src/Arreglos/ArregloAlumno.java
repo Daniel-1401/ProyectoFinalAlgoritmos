@@ -15,12 +15,6 @@ public class ArregloAlumno {
 		alumno = new ArrayList <Alumno> ();
 		cargarAlumnos();
 	}
-<<<<<<< HEAD
-=======
-	
-	//Operaciones Básicas
-	
->>>>>>> mathias
 	public void adicionar (Alumno x) {
 		alumno.add(x);
 		grabarAlumnos();
@@ -59,8 +53,7 @@ public class ArregloAlumno {
 			// TODO: handle exception
 		}
 	}
-	 
-	
+
 	private void grabarAlumnos() {
 		OrdenarLista();
 		try {
@@ -86,9 +79,6 @@ public class ArregloAlumno {
 		catch (Exception e) {
 		}
 	}
-	
-	//Se cargan los datos almacenados en los archivos .txt
-	
 	private void cargarAlumnos() {
 		try {
 			BufferedReader br;
