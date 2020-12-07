@@ -38,6 +38,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionListener;
 
 //import java.sql.Connection;
 //import java.sql.PreparedStatement;
@@ -46,7 +47,7 @@ import java.awt.event.MouseAdapter;
 //import ConectorBD.Conexion;
 
 
-class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyListener, MouseListener {
+class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 	
 	
 	private JTextField txtCodigoAlumno;
@@ -67,6 +68,8 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 	private JButton btnConsultar;
 	private JComboBox<String> cboEstadoAlumno;
 	private JScrollPane scrollPane;
+	private JLabel MOVIMIENTO;
+	private int xx, xy;
 	
 	/**
 	 * Launch the application.
@@ -131,6 +134,12 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 		lblEstado.setBounds(10, 218, 58, 20);
 		lblEstado.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		getContentPane().add(lblEstado);
+		
+		MOVIMIENTO = new JLabel("");
+		MOVIMIENTO.addMouseMotionListener(this);
+		MOVIMIENTO.addMouseListener(this);
+		MOVIMIENTO.setBounds(0, 0, 649, 28);
+		getContentPane().add(MOVIMIENTO);
 		
 		txtCodigoAlumno = new JTextField();
 		txtCodigoAlumno.setBounds(95, 38, 102, 20);
@@ -334,9 +343,12 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 		editarFila();
 		HabilitarEntrada(false);
 		btnBuscar.setEnabled(false);
+		
+		
 	}
 	
 	ArregloAlumno arregloAlumno = new ArregloAlumno();
+
 	
 	
 	public void actionPerformed(ActionEvent e) {
@@ -500,7 +512,7 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 	}
 	protected void ADICIONAR(ActionEvent e) {
 		btnAdicionar.setEnabled(false);
-		btnModificar.setEnabled(true);
+		HabilitarBotones(true);
 		btnAceptar.setEnabled(true);
 		txtCodigoAlumno.setEditable(false);
 		limpieza();
@@ -669,7 +681,6 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 	}
 	private String getEstadoTxt(int E) {
 		return cboEstadoAlumno.getItemAt(E);
-		
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -712,9 +723,6 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 	public void mouseExited(MouseEvent e) {
 		
 	}
-	public void mousePressed(MouseEvent e) {
-		
-	}
 	public void mouseReleased(MouseEvent e) {
 		
 	}
@@ -753,5 +761,28 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 	protected void CERRAR(ActionEvent e) {
 		this.dispose();
 	}
+	public void mouseMoved(MouseEvent e) {
+	}
+	public void mousePressed(MouseEvent e) {
+		if (e.getSource() == MOVIMIENTO) {
+			MOVER_VENTANA(e);
+		}
+		
+	}
+	protected void MOVER_VENTANA(MouseEvent e) {
+		xx = e.getX();
+		xy = e.getY();
+	}
+	public void mouseDragged(MouseEvent e) {
+		if (e.getSource() == MOVIMIENTO) {
+			MOVE(e);
+		}
+	}
 	
+	protected void MOVE(MouseEvent e) {
+		int x = e.getXOnScreen();
+		int y = e.getYOnScreen();
+		
+		this.setLocation(x-xx, y-xy);
+	}
 }

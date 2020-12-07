@@ -36,8 +36,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import java.awt.event.MouseMotionListener;
 
-public class DlgMantenimiento_Curso extends JDialog implements ActionListener, KeyListener, MouseListener {
+public class DlgMantenimiento_Curso extends JDialog implements ActionListener, KeyListener, MouseListener, MouseMotionListener {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtCodigo;
@@ -53,7 +54,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	private JButton btnEliminar;
 	private JComboBox<String> cboCicloCurso;
 	private DefaultTableModel modelo;
-
+	private int xx, xy;
 	
 
 	/**
@@ -322,6 +323,13 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 		editarFila();
 		HabilitarEntrada(false);
 		btnBuscar.setEnabled(false);
+		{
+			MOVIMIENTO = new JLabel("");
+			MOVIMIENTO.addMouseMotionListener(this);
+			MOVIMIENTO.addMouseListener(this);
+			MOVIMIENTO.setBounds(0, 0, 643, 28);
+			contentPanel.add(MOVIMIENTO);
+		}
 	}
 	
 	ArregloCurso arregloCurso = new ArregloCurso();
@@ -489,6 +497,7 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	}
 
 	ArregloMatricula arregloMatricula = new ArregloMatricula();
+	private JLabel MOVIMIENTO;
 	private boolean ExistenAlumno(int codCurso){
 		for (int i = 0; i < arregloMatricula.tamaño(); i++) {
 			Matricula m = arregloMatricula.obtener(i);
@@ -613,6 +622,9 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 		editarFila();
 	}
 	public void mouseClicked(MouseEvent arg0) {
+		if (arg0.getSource() == MOVIMIENTO) {
+			mouseClickedMOVIMIENTO(arg0);
+		}
 		if (arg0.getSource() == tblCurso) {
 			mouseClickedTblCurso(arg0);
 		}
@@ -672,9 +684,6 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	public void mouseExited(MouseEvent arg0) {
 	}
 
-	public void mousePressed(MouseEvent arg0) {
-	}
-
 	public void mouseReleased(MouseEvent arg0) {
 	}
 
@@ -683,9 +692,32 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 	}
 	protected void keyPressedTblCurso(KeyEvent arg0) {
 	}
+	
+	protected void mouseClickedMOVIMIENTO(MouseEvent arg0) {
+	}
 
+	public void mouseMoved(MouseEvent e) {
+	}
+	public void mousePressed(MouseEvent e) {
+		if (e.getSource() == MOVIMIENTO) {
+			MOVER_VENTANA(e);
+		}
+		
+	}
+	protected void MOVER_VENTANA(MouseEvent e) {
+		xx = e.getX();
+		xy = e.getY();
+	}
+	public void mouseDragged(MouseEvent e) {
+		if (e.getSource() == MOVIMIENTO) {
+			MOVE(e);
+		}
+	}
 	
-
-	
-	
+	protected void MOVE(MouseEvent e) {
+		int x = e.getXOnScreen();
+		int y = e.getYOnScreen();
+		
+		this.setLocation(x-xx, y-xy);
+	}
 }

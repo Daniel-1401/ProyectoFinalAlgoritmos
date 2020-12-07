@@ -24,30 +24,7 @@ public class Fecha {
 		ss = c.get(Calendar.SECOND);
 		return ajustar(hh) + ":" + ajustar(mm) + ":" + ajustar(ss);
 	}
-	//  Métodos static que retornan valor (con parámetros)
-	public static String enTextoFecha(String fecha) {
-		String[] s = fecha.split("/");
-		if (s.length == 3)
-			return s[0] + " de " + obtenerMes(s[1]) + " de " + s[2];
-		else
-			return "";
-	}
-	public static String obtenerMes(String mes) {
-		switch (mes) {
-			case "01": return "Enero";
-			case "02": return "Febrero";
-			case "03": return "Marzo";
-			case "04": return "Abril";
-			case "05": return "Mayo";
-			case "06": return "Junio";
-			case "07": return "Julio";
-			case "08": return "Agosto";
-			case "09": return "Setiembre";
-			case "10": return "Octubre";
-			case "11": return "Noviembre";
-			default: return "Diciembre";
-		}
-	}
+	
 	public static int diasTranscurridos(String fechaInicial, String fechaFinal) {
 		try {
 			SimpleDateFormat adt = new SimpleDateFormat("dd/MM/yyyy");

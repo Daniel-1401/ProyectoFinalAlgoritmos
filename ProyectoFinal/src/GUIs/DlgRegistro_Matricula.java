@@ -34,8 +34,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseMotionListener;
 
-public class DlgRegistro_Matricula extends JDialog implements ActionListener, MouseListener, KeyListener {
+public class DlgRegistro_Matricula extends JDialog implements ActionListener, MouseListener, KeyListener, MouseMotionListener {
 
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnAceptar;
@@ -58,7 +59,9 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	private JTable tblMatricula;
 	private JScrollPane scrollPane;
 	private DefaultTableModel modelo;
-
+	private int xx, xy;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -288,12 +291,19 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		editarFila();
 		HabilitarEntradas(false);
 		cboNumMatricula.setEnabled(false);
+		
+		MoverVentana = new JLabel("");
+		MoverVentana.addMouseMotionListener(this);
+		MoverVentana.addMouseListener(this);
+		MoverVentana.setBounds(0, 0, 623, 28);
+		contentPanel.add(MoverVentana);
 		cboNumMatricula.setVisible(false);
 	}
 	
 	ArregloMatricula am = new ArregloMatricula();
 	ArregloAlumno aa = new ArregloAlumno();
 	ArregloCurso ac = new ArregloCurso();
+	private JLabel MoverVentana;
 
 	private void obtenerNumMatricula() {
 		Matricula m;
@@ -570,6 +580,9 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	}
 	
 	public void mouseClicked(MouseEvent e) {
+		if (e.getSource() == MoverVentana) {
+			mouseClickedMoverVentana(e);
+		}
 		if (e.getSource() == tblMatricula) {
 			mouseClickedTblMatricula(e);
 		}
@@ -595,6 +608,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 		if (e.getSource() == tblMatricula) {
 			keyPressedTblMatricula(e);
 		}
+		
 	}
 	public void keyReleased(KeyEvent e) {
 		e.consume();
@@ -605,5 +619,30 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	protected void keyPressedTblMatricula(KeyEvent e) {
 	}
 	protected void actionPerformedCboNumMatricula(ActionEvent arg0) {
+	}
+	protected void mouseClickedMoverVentana(MouseEvent e) {
+	}
+	protected void mouseDraggedMoverVentana(MouseEvent e) {
+	}
+	public void mouseMoved(MouseEvent e) {
+		if (e.getSource() == MoverVentana) {
+			MOVER_VENTANA(e);
+		}
+	}
+	protected void MOVER_VENTANA(MouseEvent e) {
+		xx = e.getX();
+		xy = e.getY();
+	}
+	public void mouseDragged(MouseEvent e) {
+		if (e.getSource() == MoverVentana) {
+			MOVE(e);
+		}
+	}
+	
+	protected void MOVE(MouseEvent e) {
+		int x = e.getXOnScreen();
+		int y = e.getYOnScreen();
+		
+		this.setLocation(x-xx, y-xy);
 	}
 }
