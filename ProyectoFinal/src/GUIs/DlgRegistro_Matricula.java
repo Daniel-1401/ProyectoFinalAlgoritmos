@@ -59,6 +59,7 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	private JTable tblMatricula;
 	private JScrollPane scrollPane;
 	private DefaultTableModel modelo;
+	private JLabel MoverVentana;
 	private int xx, xy;
 	
 	
@@ -303,7 +304,6 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	ArregloMatricula am = new ArregloMatricula();
 	ArregloAlumno aa = new ArregloAlumno();
 	ArregloCurso ac = new ArregloCurso();
-	private JLabel MoverVentana;
 
 	private void obtenerNumMatricula() {
 		Matricula m;
@@ -516,16 +516,6 @@ public class DlgRegistro_Matricula extends JDialog implements ActionListener, Mo
 	
 	private void Listar() {
 		int posFila = 0;
-		if (modelo.getRowCount() > 0) {
-			posFila = tblMatricula.getSelectedRow();
-		}
-		if (modelo.getRowCount() == am.tamaño() - 1) {
-			posFila = am.tamaño() -1;
-		}
-		if (posFila == am.tamaño()) {
-			posFila--;
-		}
-		
 		modelo.setRowCount(0);
 		Matricula M;
 		for (int i = 0; i < am.tamaño(); i++) {

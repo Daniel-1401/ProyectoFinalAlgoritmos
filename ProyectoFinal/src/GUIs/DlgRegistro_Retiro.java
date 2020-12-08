@@ -506,22 +506,26 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		txtNumeroRetiro.setText("");
 	}
 	protected void ELIMINAR(ActionEvent arg0) {
-		int numRetiro = leerNumeroRetiro();
-		int NumMatricula = leerNumeroMatricula();
-		if (SE_PUEDE_ELIMINAR(NumMatricula)) {
-			int confimacion = FuncionesGenerales.confirmar("DESEA CANCELAR ESTE RETIRO");
-			if (confimacion == 0) {
-				Retiro r = ar.buscar(numRetiro);
-				Matricula m = am.buscar(r.getNumMatricula());
-				int codAlumno = m.getcodAlumno();
-				Alumno a = aa.buscar(codAlumno);
-				a.setEstado(1);
-				aa.actualizarArchivo();
-				ar.eliminar(r);
+		try {
+			int numRetiro = leerNumeroRetiro();
+			int NumMatricula = leerNumeroMatricula();
+			if (SE_PUEDE_ELIMINAR(NumMatricula)) {
+				int confimacion = FuncionesGenerales.confirmar("DESEA CANCELAR ESTE RETIRO");
+				if (confimacion == 0) {
+					Retiro r = ar.buscar(numRetiro);
+					Matricula m = am.buscar(r.getNumMatricula());
+					int codAlumno = m.getcodAlumno();
+					Alumno a = aa.buscar(codAlumno);
+					a.setEstado(1);
+					aa.actualizarArchivo();
+					ar.eliminar(r);
+				}
+				Listar();
 			}
-			Listar();
+			
+		}catch (Exception e) {
+			FuncionesGenerales.error("NO HAY RETIROS POR CANCELAR");
 		}
-		
 	}
 	
 	void HABILITAR_BOTONES(JButton btnDESHABILITAR, JButton btnACTIVAR) {
@@ -553,16 +557,6 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 	
 	void Listar(){
 		int posFila = 0;
-		if (modelo.getRowCount() > 0) {
-			posFila = tblRetiro.getSelectedRow();
-		}
-		if (modelo.getRowCount() == ar.tamaño() - 1) {
-			posFila = ar.tamaño() - 1;
-		}
-		if (posFila == ar.tamaño()) {
-			posFila --;			
-		}
-		
 		modelo.setRowCount(0);
 		Retiro R;
 		for (int i=0; i<ar.tamaño(); i++) {
@@ -607,8 +601,7 @@ public class DlgRegistro_Retiro extends JDialog implements ActionListener, KeyLi
 		try {
 			txtNumeroRetiro.setText("" + cboNumeroRetiro.getSelectedItem());
 			if (btnModificar.isEnabled() == false) {
-				txtNumMatricula.setText("" + 
-				ar.buscar(
+				txtNumMatricula.setText("" + ar.buscar(
 				Integer.parseInt((String) cboNumeroRetiro.getSelectedItem())
 				).getNumMatricula());
 			}

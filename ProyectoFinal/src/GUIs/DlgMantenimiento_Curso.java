@@ -510,15 +510,6 @@ public class DlgMantenimiento_Curso extends JDialog implements ActionListener, K
 
 	private void Listar() {
 		int posFila = 0;
-		if (modelo.getRowCount() > 0) {
-			posFila = tblCurso.getSelectedRow();
-		}
-		if (modelo.getRowCount() == arregloCurso.tamaño() - 1) {
-			posFila = arregloCurso.tamaño() - 1;
-		}
-		if (posFila == arregloCurso.tamaño()) {
-			posFila--;
-		}
 		modelo.setRowCount(0);
 		Curso C;
 		for (int i = 0; i < arregloCurso.tamaño(); i++) {

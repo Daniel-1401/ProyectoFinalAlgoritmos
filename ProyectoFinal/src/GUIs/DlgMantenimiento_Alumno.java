@@ -511,7 +511,6 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 		}
 	}
 	protected void ADICIONAR(ActionEvent e) {
-		btnAdicionar.setEnabled(false);
 		HabilitarBotones(true);
 		btnAceptar.setEnabled(true);
 		txtCodigoAlumno.setEditable(false);
@@ -520,6 +519,7 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 		txtNombresAlumno.requestFocus();
 		btnBuscar.setEnabled(false);
 		cboEstadoAlumno.setEnabled(false);
+		btnAdicionar.setEnabled(false);
 	}
 	protected void MODIFICAR(ActionEvent e) {
 		btnAdicionar.setEnabled(true);
@@ -619,15 +619,6 @@ class DlgMantenimiento_Alumno extends JDialog implements ActionListener, KeyList
 	
 	private void Listar() {
 		int posFila = 0;
-		if (modelo.getRowCount() > 0) {
-			posFila = tblAlumnos.getSelectedRow();
-		}
-		if (modelo.getRowCount() == arregloAlumno.tamaño() - 1) {
-			posFila = arregloAlumno.tamaño() - 1;
-		}
-		if (posFila == arregloAlumno.tamaño()) {
-			posFila--;
-		}
 		modelo.setRowCount(0);
 		Alumno A;
 		for(int i = 0; i < arregloAlumno.tamaño(); i++) {
